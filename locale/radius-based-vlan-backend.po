@@ -1,0 +1,15 @@
+msgid "Fallback VLAN ID for user authentication"
+msgstr "Rückfall-VLAN-ID für die Benutzerauthentifizierung"
+
+msgid ""
+    "A value between 1 and 4095. This VLAN ID will be assigned to users whose "
+    "don't received an explit VLAN ID via a group or role membership. Use 0 "
+    "to not use a fallback VLAN ID."
+msgstr ""
+   "Ein Wert zwischen 1 und 4095. Diese VLAN-ID wird an Benutzer zugewiesen, "
+   "welche keine explizite VLAN-ID über eine Gruppen- oder "
+   "Rollenmitgliedschaft erhalten haben. Benutzen Sie den Wert 0, um keine "
+   "Rückfall-VLAN-ID zu konfigurieren."
+
+msgid "Module: RADIUS-based VLAN"
+msgstr "Modul: RADIUS-basierte VLAN-Unterstützung"
