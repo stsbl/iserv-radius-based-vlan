@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sed -r -E '
+  s/^(\s+)program(\s+)=(\s+")\/usr\/lib\/iserv\/wifi_host_login(\s+.*)$/\1program\2=\3\/usr\/lib\/iserv\/wifi_vlan_host_login\4/
+'
