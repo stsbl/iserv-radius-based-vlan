@@ -1,0 +1,10 @@
+#!/bin/sh
+
+sed -E '/^\tpost-auth \{/a\
+\t\tupdate {\
+\t\t\t&reply:Tunnel-Type := &session-state:Tunnel-Type\
+\t\t\t&reply:Tunnel-Medium-Type := &session-state:Tunnel-Medium-Type\
+\t\t\t&reply:Tunnel-Private-Group-Id := &session-state:Tunnel-Private-Group-Id\
+\t\t}\
+'
+

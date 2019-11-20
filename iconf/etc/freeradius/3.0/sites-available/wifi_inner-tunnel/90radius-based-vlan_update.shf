@@ -1,0 +1,17 @@
+#!/bin/sh
+
+sed -E '/^post-auth \{/a\
+\tupdate \{\
+\t\t&outer.session-state: += &reply:\
+\t\}\
+\
+\tupdate outer.session-state \{\
+\t\tMS-MPPE-Encryption-Policy \!* ANY\
+\t\tMS-MPPE-Encryption-Types \!* ANY\
+\t\tMS-MPPE-Send-Key \!* ANY\
+\t\tMS-MPPE-Recv-Key \!* ANY\
+\t\tMessage-Authenticator \!* ANY\
+\t\tEAP-Message \!* ANY\
+\t\tProxy-State \!* ANY\
+\t\}\
+'
