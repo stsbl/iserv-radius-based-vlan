@@ -1,0 +1,11 @@
+#!/bin/sh
+
+sed -E '/^Check \/etc\/ldap\/schema\/nis-rfc2307bis\.ldif/a\
+\
+Check \/etc\/ldap\/schema\/radius.ldif\
+Test "import \/etc\/ldap\/schema\/radius.ldif"\
+  chkldif \/etc\/ldap\/schema\/radius.ldif\
+  ---\
+  chkldif -r \/etc\/ldap\/schema\/radius.ldif\
+\
+'

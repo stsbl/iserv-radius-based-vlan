@@ -1,0 +1,38 @@
+Source: stsbl-iserv-radius-based-vlan
+Section: misc
+Priority: optional
+Maintainer: Stadtteilschule Blankenese <repository@stsbl.de>
+Build-Depends: debhelper (>= 10)
+Build-Depends-Indep: iserv3-dev
+Standards-Version: 4.4.1
+
+Package: stsbl-iserv-radius-based-vlan
+Architecture: all
+Depends: ${misc:Depends},
+  ${perl:Depends},
+  iserv-portal,
+  iserv-server-freeradius,
+Suggests: iserv-wlan,
+Description: RADIUS-basierte VLAN-Unterstützung für IServ (EXPERIMENTELL)
+ Erlaubt die Zuweisung von VLAN-Netzwerken über den RADIUS-Server auf dem
+ IServ.
+ .
+ Das Modul unterstützt zwei Modi:
+ .
+ - Benutzer-basierte VLAN-Zuweisung. Dabei wird für Benutzer, die sich
+   über Access-Points am RADIUS-Server anmelden, an die Antwort ein
+   VLAN-Tag angehängt, welches vom Access-Point ausgewertet wird.
+   Entsprechend dieser Antwort wird der Client des Benutzers diesem VLAN
+   zugewiesen. Hierfür muss das Modul "IServ WLAN" installiert sein.
+ - MAC-basierte VLAN-Zuweisung. Dabei wird die MAC-Adresse des WLAN-Clients
+   oder des an den Switch angeschlossenen Clients als Benutzername an den
+   RADIUS-Server gesendet. Dieser meldet analog zur Benutzer-basierten
+   VLAN-Zuweisung in der Antwort das zu nutzende VLAN an die Netzwerkhardware
+   zurück. Entsprechend wird dem Client das VLAN zugewiesen. Die konkrete
+   Umsetzung durch das Modul erfolgt hierbei durch einen separaten
+   RADIUS-Server auf dem IServ, der auf Port 18122 läuft. Dieser akzeptiert
+   alle eingehenden Authentifizierungsversuche und sendet bei bekannten
+   MAC-Adressen das konfigurierte VLAN mit. Unbekannten MAC-Adressen kann
+   wahlweise ein Rückfall-VLAN zugewiesen oder die Authentifizierung verweigert
+   werden.
+Tag: suite::iserv, role::plugin, status::highlighted, status::experimental
