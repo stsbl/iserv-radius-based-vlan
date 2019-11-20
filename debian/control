@@ -10,6 +10,7 @@ Package: stsbl-iserv-radius-based-vlan
 Architecture: all
 Depends: ${misc:Depends},
   ${perl:Depends},
+  iserv-config-file,
   iserv-portal,
   iserv-server-freeradius,
   iserv-server-openldap (>= 19.11.19),

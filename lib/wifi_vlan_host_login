@@ -1,0 +1,62 @@
+#!/usr/bin/perl -CSDAL
+
+use warnings;
+use strict;
+use Getopt::Long qw(:config bundling);
+use IServ::Conf;
+use IServ::DB;
+
+$IServ::DB::user = "wlan" if $>;
+
+# Backup original ARGV ...
+my @ORIG_ARGV = @ARGV;
+
+my ($fake_help);
+GetOptions("help|h" => \$fake_help);
+
+# ..., run manipulation on proper arguments, ... 
+eval
+{
+  if (@ARGV == 2)
+  {
+    my (undef, $user) = @ARGV;
+
+    my %def = IServ::DB::SelectRow_Hash <<SQL
+SELECT DISTINCT ON (actuser) actuser, ip_range, priority, r.name AS room FROM (
+  SELECT m.actuser, r1.ip_range, r1.room_id, r1.priority FROM radius_vlan r1
+    INNER JOIN radius_vlan_group vg ON r1.id = vg.vlan_id
+    INNER JOIN members m ON vg.group = m.actgrp
+  WHERE m.actuser = ?
+  UNION
+  SELECT ur.act AS actuser, r2.ip_range, r2.room_id, r2.priority FROM radius_vlan r2
+    INNER JOIN radius_vlan_role vr ON r2.id = vr.vlan_id
+    INNER JOIN user_roles ur ON ur.role = vr.role
+  WHERE ur.act = ?
+) AS q
+LEFT JOIN rooms r ON r.id = q.room_id
+ORDER BY actuser, priority
+LIMIT 1
+SQL
+    , $user, $user;
+
+    # lead wifi_host_login to believe that our VLAN-specific values are set as
+    # global config value
+    if (defined $def{room})
+    {
+      $conf->{WifiDefaultRoom} = $def{room};
+    }
+
+    if (defined $def{ip_range})
+    {
+      $conf->{WlanIPRange} = $def{ip_range};
+    }
+  }
+};
+
+warn "$@" if $@;
+
+# ... and restore original ARGV finally
+@ARGV = @ORIG_ARGV;
+
+# Execute original program
+do "/usr/lib/iserv/wifi_host_login";
