@@ -1,0 +1,5 @@
+Check /etc/freeradius/3.0/sites-available/vlan
+Check /etc/freeradius/3.0/sites-available/vlan_inner-tunnel
+Link ../sites-available/vlan /etc/freeradius/3.0/sites-enabled/vlan
+Link ../sites-available/vlan_inner-tunnel /etc/freeradius/3.0/sites-enabled/vlan_inner-tunnel
+

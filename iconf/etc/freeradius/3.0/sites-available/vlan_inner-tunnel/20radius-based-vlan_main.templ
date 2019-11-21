@@ -1,0 +1,44 @@
+# This is a virtual server that handles *only* inner tunnel requests for
+# EAP-TTLS and PEAP types.
+server vlan_inner-tunnel {
+	authorize {
+		ldap_hosts
+		ok
+		suffix
+		update control {
+			Auth-Type := Accept
+			Proxy-To-Realm := LOCAL
+		}
+	}
+
+	authenticate {
+		ok
+	}
+
+	post-auth {
+		update {
+			$([ -n "$RadiusBasedVlanFallbackId" ] && cat <<EOT
+reply:Tunnel-Type = VLAN
+			reply:Tunnel-Medium-Type = IEEE-802
+			reply:Tunnel-Private-Group-ID = '$RadiusBasedVlanFallbackId'
+			
+EOT
+			)&outer.session-state: += &reply
+		}
+
+		update outer.session-state {
+        		MS-MPPE-Encryption-Policy !* ANY
+			MS-MPPE-Encryption-Types !* ANY
+			MS-MPPE-Send-Key !* ANY
+			MS-MPPE-Recv-Key !* ANY
+			Message-Authenticator !* ANY
+			EAP-Message !* ANY
+			Proxy-State !* ANY
+		}
+	}
+
+	post-proxy {
+		eap
+	}
+
+} # vlan_inner-tunnel server block

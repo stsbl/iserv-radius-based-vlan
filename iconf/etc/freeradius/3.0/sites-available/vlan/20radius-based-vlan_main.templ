@@ -1,0 +1,69 @@
+server vlan {
+	listen {
+		type = auth
+		ipv4addr = 127.0.0.1
+		port = 18122
+#		interface = eth0
+#		clients = per_socket_clients
+                limit {
+			max_connections = 16
+			lifetime = 0
+			idle_timeout = 30
+		}
+	}
+
+$(
+for i in $(netquery -p ip)
+do
+  echo "	listen {"
+  echo "		type = auth"
+  echo "		ipv4addr = $i"
+  echo "		port = 18122"
+  echo "#		interface = eth0"
+  echo "#		clients = per_socket_clients"
+  echo "                limit {"
+  echo "			max_connections = 16"
+  echo "			lifetime = 0"
+  echo "			idle_timeout = 30"
+  echo "		}"
+  echo "	}"
+  echo
+done)
+
+	# Restrict wifi server to use tunneled eap methods (no user 
+	# database available here).
+	authorize {
+		preprocess
+		suffix
+	#	ntdomain
+	        if (EAP-Message) {
+	                update control {
+	                        Virtual-Server := "vlan_inner-tunnel"
+	                }
+	        }
+		eap {
+			ok = return
+		}
+		ok
+		expiration
+		logintime
+	}
+
+	authenticate {
+		ok
+		eap
+	}
+	
+	post-auth {
+	        Post-Auth-Type REJECT {	
+			attr_filter.access_reject
+	        }
+		update {
+			&reply:Tunnel-Type := &session-state:Tunnel-Type
+			&reply:Tunnel-Medium-Type := &session-state:Tunnel-Medium-Type
+			&reply:Tunnel-Private-Group-Id := &session-state:Tunnel-Private-Group-Id
+		}
+	}
+
+}
+
