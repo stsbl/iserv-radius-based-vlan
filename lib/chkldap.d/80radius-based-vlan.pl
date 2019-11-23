@@ -61,7 +61,7 @@ SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
 SQL
   , $fallback_vlan_id;
   %hosts = IServ::DB::SelectAll_Hash <<SQL
-SELECT DISTINCT ON (name) name, description, inv_number, ip, mac, owner, vlan_id, priority FROM (
+SELECT DISTINCT ON (q.name) q.name, description, inv_number, ip, mac, owner, vlan_id, priority, r.name AS room FROM (
   SELECT
     h.description,
     h.inv_number,
@@ -69,6 +69,7 @@ SELECT DISTINCT ON (name) name, description, inv_number, ip, mac, owner, vlan_id
     h.mac,
     h.name,
     h.owner,
+    h.room_id,
     r1.vlan_id,
     r1.priority
   FROM radius_vlan r1
@@ -82,11 +83,14 @@ SELECT DISTINCT ON (name) name, description, inv_number, ip, mac, owner, vlan_id
     h2.mac,
     h2.name,
     h2.owner,
+    h2.room_id,
     ? AS vlan_id,
     (SELECT MAX(r3.priority) FROM radius_vlan r3) + 1 AS priority
   FROM hosts h2
-  WHERE h2.mac IS NOT NULL
-) AS q ORDER BY q.name, q.priority
+) 
+AS q
+LEFT JOIN rooms r ON q.room_id = r.id
+ORDER BY q.name, q.priority
 SQL
   , $fallback_vlan_id;
 }
@@ -105,11 +109,11 @@ SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
   SELECT ur.act AS actuser, r2.vlan_id, r2.priority FROM radius_vlan r2
     INNER JOIN radius_vlan_role vr ON r2.id = vr.vlan_id
     INNER JOIN user_roles ur ON ur.role = vr.role
-) AS q ORDER BY q.actuser, q.priority
+) AS q
 SQL
   ;
   %hosts = IServ::DB::SelectAll_Hash <<SQL
-SELECT DISTINCT ON (name) name, description, inv_number, ip, mac, owner, vlan_id, priority FROM (
+SELECT DISTINCT ON (q.name) q.name, description, inv_number, ip, mac, owner, vlan_id, priority, r.name AS room FROM (
   SELECT
     h.description,
     h.inv_number,
@@ -117,15 +121,19 @@ SELECT DISTINCT ON (name) name, description, inv_number, ip, mac, owner, vlan_id
     h.mac,
     h.name,
     h.owner,
+    h.room_id,
     r1.vlan_id,
     r1.priority
   FROM radius_vlan r1
     RIGHT JOIN hosts h ON h.ip << r1.ip_range
-  WHERE h.mac IS NOT NULL
-) AS q ORDER BY q.name, q.priority
+) AS q
+LEFT JOIN rooms r ON q.room_id = r.id
+ORDER BY q.name, q.priority
 SQL
   ;
 }
+
+my %rooms = IServ::DB::SelectAll_Hash "SELECT name, room_no FROM rooms";
 
 # Add radiusProfile to all IServ users which have a VLAN ID assigned. If there
 # is not explicit VLAN set and we do not have a fallback, "unknown" users will
@@ -142,12 +150,28 @@ for my $act (sort keys %users)
   ;
 }
 
+::want ::dn(ou => "rooms"),
+  objectClass => [ "organizationalUnit" ],
+  ou => "rooms"
+;
+
+for my $name (sort keys %rooms)
+{
+  ::want ::dn(cn => $name, ou => "rooms"),
+    cn => $name,
+    objectClass => [
+      "room"
+    ],
+    roomNumber => $rooms{$name}{room_no}
+  ;
+}
+
 ::want ::dn(ou => "hosts"),
   objectClass => [ "organizationalUnit" ],
   ou => "hosts"
 ;
 
-# Add simpleSecurityObject with radiusProfile to all hosts which have a VLAN ID
+# Add radiusProfile to all hosts which have a VLAN ID
 # assigned. If there is not explicit VLAN set and we do not have a fallback,
 # "unknown" hosts will not listed here.
 for my $name (sort keys %hosts)
@@ -157,7 +181,8 @@ for my $name (sort keys %hosts)
     objectClass => [
       "device",
       "ieee802Device",
-      "ipHost"
+      "ipHost",
+      "memberOfGroup"
     ],
     description => $hosts{$name}{description},
     ipHostNumber => $hosts{$name}{ip},
@@ -176,7 +201,13 @@ for my $name (sort keys %hosts)
       radiusTunnelPrivateGroupId => $hosts{$name}{vlan_id},
       radiusTunnelType => "VLAN"
   }
-}
 
+  if (defined $hosts{$name}{room})
+  {
+    ::want ::dn(cn => $name, ou => "hosts"),
+      memberOf => ::dn(cn => $hosts{$name}{room}, ou => "rooms"),
+    ;
+  }
+}
 
 1;
