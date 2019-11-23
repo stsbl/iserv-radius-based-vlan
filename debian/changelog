@@ -1,5 +1,19 @@
-stsbl-iserv-radius-based-vlan (19.11.20-1) unstable; urgency=medium
+stsbl-iserv-radius-based-vlan (19.11.23-1) stable; urgency=medium
 
-  * Initial Release.
+  - First experimental release including the following features:
+  * Generate LDAP entries, patch FreeRADIUS config
+  * Added initial database
+  * Added some dependencies and config variable for fallback VLAN
+  * Added support for setting room and IP range per VLAN (hacky)
+  * Patch FreeRADIUS exec config
+  * Added secondary FreeRADIUS server for MAC-based VLAN assignment
+  * Updated hosts objects in LDAP to use name as CN and device class as
+    structural class, added all information from database which were
+    mapable to core.ldif schema, added radius.schema file for reference
+    purposes
+  * Cleanup, add room to LDAP
+  * Added newhosts hook to update LDAP information
+  * Include UUID for hosts and rooms, further cleanup
+  * Prepare initial release
 
- -- Stadtteilschule Blankenese <repository@stsbl.de>  Wed, 20 Nov 2019 02:28:23 +0100
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Sat, 23 Nov 2019 23:13:54 +0100
