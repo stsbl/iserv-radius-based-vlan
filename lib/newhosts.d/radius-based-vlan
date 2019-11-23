@@ -1,0 +1,3 @@
+#!/bin/sh
+
+chkldap -r > /dev/null
