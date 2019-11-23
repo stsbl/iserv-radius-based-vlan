@@ -2,7 +2,7 @@
 
 sed -E '/^Check \/etc\/ldap\/schema\/nis-rfc2307bis\.ldif/a\
 \
-Check \/etc\/ldap\/schema\/radius.ldif\
+Check \/etc\/ldap\/schema\/radius.\{ldif,schema\}\
 Test "import \/etc\/ldap\/schema\/radius.ldif"\
   chkldif \/etc\/ldap\/schema\/radius.ldif\
   ---\

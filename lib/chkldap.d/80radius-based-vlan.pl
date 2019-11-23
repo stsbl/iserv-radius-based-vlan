@@ -40,7 +40,11 @@ if (defined $fallback_vlan_id)
 {
   %users = IServ::DB::SelectAll_Hash <<SQL
 SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
-  SELECT m.actuser, r1.vlan_id, r1.priority FROM radius_vlan r1
+  SELECT
+    m.actuser,
+    r1.vlan_id,
+    r1.priority
+  FROM radius_vlan r1
     INNER JOIN radius_vlan_group vg ON r1.id = vg.vlan_id
     INNER JOIN members m ON vg.group = m.actgrp
   UNION
@@ -57,14 +61,27 @@ SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
 SQL
   , $fallback_vlan_id;
   %hosts = IServ::DB::SelectAll_Hash <<SQL
-SELECT DISTINCT ON (name) name, mac, vlan_id, priority FROM (
-  SELECT h.name, h.mac, r1.vlan_id, r1.priority FROM radius_vlan r1
+SELECT DISTINCT ON (name) name, description, inv_number, ip, mac, owner, vlan_id, priority FROM (
+  SELECT
+    h.description,
+    h.inv_number,
+    h.ip,
+    h.mac,
+    h.name,
+    h.owner,
+    r1.vlan_id,
+    r1.priority
+  FROM radius_vlan r1
     RIGHT JOIN hosts h ON h.ip << r1.ip_range
   WHERE h.mac IS NOT NULL
   UNION
   SELECT
-    h2.name,
+    h2.description,
+    h2.inv_number,
+    h2.ip,
     h2.mac,
+    h2.name,
+    h2.owner,
     ? AS vlan_id,
     (SELECT MAX(r3.priority) FROM radius_vlan r3) + 1 AS priority
   FROM hosts h2
@@ -77,7 +94,11 @@ else
 {
   %users = IServ::DB::SelectAll_Hash <<SQL
 SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
-  SELECT m.actuser, r1.vlan_id, r1.priority FROM radius_vlan r1
+  SELECT
+    m.actuser,
+    r1.vlan_id,
+    r1.priority
+  FROM radius_vlan r1
     INNER JOIN radius_vlan_group vg ON r1.id = vg.vlan_id
     INNER JOIN members m ON vg.group = m.actgrp
   UNION
@@ -88,8 +109,17 @@ SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
 SQL
   ;
   %hosts = IServ::DB::SelectAll_Hash <<SQL
-SELECT DISTINCT ON (name) name, mac, vlan_id, priority FROM (
-  SELECT h.name, h.mac, r1.vlan_id, r1.priority FROM radius_vlan r1
+SELECT DISTINCT ON (name) name, description, inv_number, ip, mac, owner, vlan_id, priority FROM (
+  SELECT
+    h.description,
+    h.inv_number,
+    h.ip,
+    h.mac,
+    h.name,
+    h.owner,
+    r1.vlan_id,
+    r1.priority
+  FROM radius_vlan r1
     RIGHT JOIN hosts h ON h.ip << r1.ip_range
   WHERE h.mac IS NOT NULL
 ) AS q ORDER BY q.name, q.priority
@@ -99,7 +129,7 @@ SQL
 
 # Add radiusProfile to all IServ users which have a VLAN ID assigned. If there
 # is not explicit VLAN set and we do not have a fallback, "unknown" users will
-# not get the object "radiusprofile".
+# not get the object class "radiusprofile".
 for my $act (sort keys %users)
 {
   ::want ::dn(cn => $act, ou => "users"),
@@ -119,37 +149,32 @@ for my $act (sort keys %users)
 
 # Add simpleSecurityObject with radiusProfile to all hosts which have a VLAN ID
 # assigned. If there is not explicit VLAN set and we do not have a fallback,
-# "unknown" hosts will not listed here
+# "unknown" hosts will not listed here.
 for my $name (sort keys %hosts)
 {
-  for my $mac (mac_to_cases $hosts{$name}{mac})
+  ::want ::dn(cn => $name, ou => "hosts"),
+    cn => $name,
+    objectClass => [
+      "device",
+      "ieee802Device",
+      "ipHost"
+    ],
+    description => $hosts{$name}{description},
+    ipHostNumber => $hosts{$name}{ip},
+    macAddress => $hosts{$name}{mac},
+    serialNumber => $hosts{$name}{inv_number},
+    owner => length $hosts{$name}{owner} ? ::dn(cn => $hosts{$name}{owner}, ou => "users") : undef,
+  ;
+
+  if (defined $hosts{$name}{vlan_id})
   {
-    unless (defined $hosts{$name}{vlan_id})
-    {
-      ::want ::dn(cn => $mac, ou => "hosts"),
-        cn => $mac,
-        objectClass => [
-          "simpleSecurityObject",
-          "organizationalRole"
-        ],
-        userPassword => "{crypt}!"
-      ;
-
-      next;
-    }
-
-    ::want ::dn(cn => $mac, ou => "hosts"),
-      cn => $mac,
+    ::want ::dn(cn => $name, ou => "hosts"),
       objectClass => [
         "radiusprofile",
-        "simpleSecurityObject",
-        "organizationalRole"
       ],
       radiusTunnelMediumType => "IEEE-802",
       radiusTunnelPrivateGroupId => $hosts{$name}{vlan_id},
-      radiusTunnelType => "VLAN",
-      userPassword => "{crypt}!"
-    ;
+      radiusTunnelType => "VLAN"
   }
 }
 

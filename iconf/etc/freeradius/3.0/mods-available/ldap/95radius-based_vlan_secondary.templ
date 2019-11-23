@@ -149,7 +149,7 @@ ldap ldap_hosts {
 		#  For Active Directory, you should use
 		#  "samaccountname=" instead of "uid="
 		#
-		filter = "(cn=%{%{Stripped-User-Name}:-%{User-Name}})"
+		filter = "(macAddress=%{%{Stripped-User-Name}:-%{User-Name}})"
 
 		#  SASL parameters to use for user binds
 		#
