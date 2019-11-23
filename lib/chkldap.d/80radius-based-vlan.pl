@@ -5,19 +5,6 @@ use warnings;
 use IServ::Conf;
 use IServ::DB;
 
-sub mac_to_cases($)
-{
-  my ($mac) = @_;
-  my @out;
-  $mac = lc $mac;
-
-  push @out, $mac;
-  push @out, ($mac =~ s/://gr);
-  push @out, ($mac =~ s/:/-/gr);
-
-  @out;
-}
-
 my $fallback_vlan_id = $conf->{RadiusBasedVlanFallbackId} // undef;
 
 # A VLAN ID must be between 0 (really 1 - 0 indicates disabled) and 4096
@@ -61,7 +48,18 @@ SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
 SQL
   , $fallback_vlan_id;
   %hosts = IServ::DB::SelectAll_Hash <<SQL
-SELECT DISTINCT ON (q.name) q.name, description, inv_number, ip, mac, owner, vlan_id, priority, r.name AS room FROM (
+SELECT
+  DISTINCT ON (q.name) q.name,
+  description,
+  inv_number,
+  ip,
+  mac,
+  owner,
+  q.uuid,
+  vlan_id,
+  priority,
+  r.name AS room
+FROM (
   SELECT
     h.description,
     h.inv_number,
@@ -70,6 +68,7 @@ SELECT DISTINCT ON (q.name) q.name, description, inv_number, ip, mac, owner, vla
     h.name,
     h.owner,
     h.room_id,
+    h.uuid,
     r1.vlan_id,
     r1.priority
   FROM radius_vlan r1
@@ -84,6 +83,7 @@ SELECT DISTINCT ON (q.name) q.name, description, inv_number, ip, mac, owner, vla
     h2.name,
     h2.owner,
     h2.room_id,
+    h2.uuid,
     ? AS vlan_id,
     (SELECT MAX(r3.priority) FROM radius_vlan r3) + 1 AS priority
   FROM hosts h2
@@ -113,7 +113,18 @@ SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
 SQL
   ;
   %hosts = IServ::DB::SelectAll_Hash <<SQL
-SELECT DISTINCT ON (q.name) q.name, description, inv_number, ip, mac, owner, vlan_id, priority, r.name AS room FROM (
+SELECT
+  DISTINCT ON (q.name) q.name,
+  description,
+  inv_number,
+  ip,
+  mac,
+  owner,
+  q.uuid,
+  vlan_id,
+  priority,
+  r.name AS room
+FROM (
   SELECT
     h.description,
     h.inv_number,
@@ -122,6 +133,7 @@ SELECT DISTINCT ON (q.name) q.name, description, inv_number, ip, mac, owner, vla
     h.name,
     h.owner,
     h.room_id,
+    h.uuid,
     r1.vlan_id,
     r1.priority
   FROM radius_vlan r1
@@ -133,7 +145,7 @@ SQL
   ;
 }
 
-my %rooms = IServ::DB::SelectAll_Hash "SELECT name, room_no FROM rooms";
+my %rooms = IServ::DB::SelectAll_Hash "SELECT name, room_no, uuid FROM rooms";
 
 # Add radiusProfile to all IServ users which have a VLAN ID assigned. If there
 # is not explicit VLAN set and we do not have a fallback, "unknown" users will
@@ -155,14 +167,20 @@ for my $act (sort keys %users)
   ou => "rooms"
 ;
 
+# Write as much room information from database as possible to LDAP:
+# * name
+# * location
+# * uuid
 for my $name (sort keys %rooms)
 {
   ::want ::dn(cn => $name, ou => "rooms"),
     cn => $name,
     objectClass => [
-      "room"
+      "room",
+      "uuidObject"
     ],
-    roomNumber => $rooms{$name}{room_no}
+    roomNumber => $rooms{$name}{room_no},
+    uuid => $rooms{$name}{uuid}
   ;
 }
 
@@ -171,9 +189,15 @@ for my $name (sort keys %rooms)
   ou => "hosts"
 ;
 
-# Add radiusProfile to all hosts which have a VLAN ID
-# assigned. If there is not explicit VLAN set and we do not have a fallback,
-# "unknown" hosts will not listed here.
+# Write as much host information from database as possible to LDAP:
+# * name
+# * description
+# * IP address
+# * MAC address
+# * Serial number (inventory number)
+# * owner (DN of IServ user)
+# * uuid
+# * add radiusProfile to all hosts which have a VLAN ID
 for my $name (sort keys %hosts)
 {
   ::want ::dn(cn => $name, ou => "hosts"),
@@ -182,13 +206,15 @@ for my $name (sort keys %hosts)
       "device",
       "ieee802Device",
       "ipHost",
-      "memberOfGroup"
+      "memberOfGroup",
+      "uuidObject"
     ],
     description => $hosts{$name}{description},
     ipHostNumber => $hosts{$name}{ip},
     macAddress => $hosts{$name}{mac},
-    serialNumber => $hosts{$name}{inv_number},
     owner => length $hosts{$name}{owner} ? ::dn(cn => $hosts{$name}{owner}, ou => "users") : undef,
+    serialNumber => $hosts{$name}{inv_number},
+    uuid => $hosts{$name}{uuid}
   ;
 
   if (defined $hosts{$name}{vlan_id})
