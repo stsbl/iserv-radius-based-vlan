@@ -17,8 +17,8 @@ Depends: ${misc:Depends},
   iserv-user-backend (>= 19.10.29),
 Suggests: iserv-wlan,
 Description: RADIUS-basierte VLAN-Unterstützung für IServ (EXPERIMENTELL)
- Erlaubt die Zuweisung von VLAN-Netzwerken über den RADIUS-Server auf dem
- IServ.
+ Erlaubt die Zuweisung von VLAN-Netzwerken an Benutzer und Geräte über den
+ RADIUS-Server auf dem IServ.
  .
  Das Modul unterstützt zwei Modi:
  .
@@ -38,4 +38,14 @@ Description: RADIUS-basierte VLAN-Unterstützung für IServ (EXPERIMENTELL)
    MAC-Adressen das konfigurierte VLAN mit. Unbekannten MAC-Adressen kann
    wahlweise ein Rückfall-VLAN zugewiesen oder die Authentifizierung verweigert
    werden.
+ .
+ HINWEIS: Dieses Modul baut auf neuen experimentellen Funktionen von IServ auf
+ und enthält daher noch möglicherweise Fehler. Zum jetzigen Zeitpunkt
+ existiert noch keine Möglichkeit zur vollständigen Konfiguration in der
+ Oberfläche. Lediglich das Rückfall-VLAN ist derzeit dort konfigurierbar.
+ .
+ Die restliche Konfiguration muss derzeit als root-Benutzer direkt in die
+ Datenbank eingetragen werden, was entsprechenden Zugang und Kenntnisse des
+ System erfordert. An der Konfigurationsoberfläche wird derzeit gearbeitet,
+ diese wird mit einem der ersten Aktualisierungen des Moduls hinzugefügt.
 Tag: suite::iserv, role::plugin, status::highlighted, status::experimental
