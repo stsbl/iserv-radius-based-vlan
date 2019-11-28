@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "remove" ]
+then
+  rm -f /etc/freeradius/3.0/sites-enabled/vlan || true
+  rm -f /etc/freeradius/3.0/sites-enabled/vlan_inner-tunnel || true
+fi
+
+#DEBHELPER#

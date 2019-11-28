@@ -1,2 +1,2 @@
 # Secondary VLAN FreeRADIUS
-domain (ip ip6) table filter chain input_lan proto tcp dport (18122) ACCEPT;
+domain (ip ip6) table filter chain input_lan proto udp dport (18122) ACCEPT;
