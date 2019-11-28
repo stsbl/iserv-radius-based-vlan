@@ -1,3 +1,11 @@
+stsbl-iserv-radius-based-vlan (19.11.28-1) stable; urgency=medium
+
+  * Added myself to copyright
+  * Added postrm to properly cleanup on package removal
+  * Fixed firewall rule
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Thu, 28 Nov 2019 03:05:18 +0100
+
 stsbl-iserv-radius-based-vlan (19.11.23-1) stable; urgency=medium
 
   - First experimental release including the following features:
