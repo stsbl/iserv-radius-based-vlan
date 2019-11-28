@@ -12,6 +12,18 @@ server vlan_inner-tunnel {
 	}
 
 	authenticate {
+		Auth-Type PAP {
+			ok
+		}
+
+		Auth-Type CHAP {
+			ok
+		}
+
+		Auth-Type MS-CHAP {
+			ok
+		}
+
 		ok
 	}
 
