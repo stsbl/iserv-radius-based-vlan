@@ -32,3 +32,5 @@ CREATE TABLE radius_vlan_role (
 );
 
 CREATE INDEX radius_vlan_role_vlan_id_key ON radius_vlan_role(VLAN_ID);
+
+GRANT SELECT ON radius_vlan, radius_vlan_group, radius_vlan_role TO symfony;
