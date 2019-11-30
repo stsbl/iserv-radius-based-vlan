@@ -28,7 +28,26 @@ do
   echo "		}"
   echo "	}"
   echo
-done)
+done
+if [ -x "/usr/sbin/netquery6" ]
+then
+  for i in $(netquery6 -gul ip)
+  do
+    echo "	listen {"
+    echo "		type = auth"
+    echo "		ipv6addr = $i"
+    echo "		port = 18122"
+    echo "#		interface = eth0"
+    echo "#		clients = per_socket_clients"
+    echo "                limit {"
+    echo "			max_connections = 16"
+    echo "			lifetime = 0"
+    echo "			idle_timeout = 30"
+    echo "		}"
+    echo "	}"
+    echo
+  done
+fi)
 
 	# Restrict wifi server to use tunneled eap methods (no user 
 	# database available here).
