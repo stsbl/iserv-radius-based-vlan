@@ -2,29 +2,36 @@
 # EAP-TTLS and PEAP types.
 server vlan_inner-tunnel {
 	authorize {
+		perl_vlan
 		ldap_hosts
-		ok
-		suffix
+
 		update control {
-			Auth-Type := Accept
 			Proxy-To-Realm := LOCAL
+		}
+
+		pap
+		chap
+		mschap_noop
+
+		eap {
+			ok = return
 		}
 	}
 
 	authenticate {
 		Auth-Type PAP {
-			ok
+			pap
 		}
 
 		Auth-Type CHAP {
-			ok
+			chap
 		}
 
 		Auth-Type MS-CHAP {
-			ok
+			mschap_noop
 		}
 
-		ok
+		eap
 	}
 
 	post-auth {
