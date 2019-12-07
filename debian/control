@@ -41,13 +41,10 @@ Description: RADIUS-basierte VLAN-Unterstützung für IServ (EXPERIMENTELL)
    wahlweise ein Rückfall-VLAN zugewiesen oder die Authentifizierung verweigert
    werden.
  .
- HINWEIS: Dieses Modul baut auf neuen experimentellen Funktionen von IServ auf
- und enthält daher noch möglicherweise Fehler. Zum jetzigen Zeitpunkt
- existiert noch keine Möglichkeit zur vollständigen Konfiguration in der
- Oberfläche. Lediglich das Rückfall-VLAN ist derzeit dort konfigurierbar.
+ Das Modul wird nach der Installation unter Verwaltung » Netzwerk »
+ VLAN-Netzwerke konfiguriert. Zusätzlich kann in der Systemkonfiguration das
+ globale Rückfall-VLAN eingetragen werden.
  .
- Die restliche Konfiguration muss derzeit als root-Benutzer direkt in die
- Datenbank eingetragen werden, was entsprechenden Zugang und Kenntnisse des
- System erfordert. An der Konfigurationsoberfläche wird derzeit gearbeitet,
- diese wird mit einem der ersten Aktualisierungen des Moduls hinzugefügt.
+ HINWEIS: Dieses Modul baut auf neuen experimentellen Funktionen von IServ auf
+ und enthält daher noch möglicherweise Fehler.
 Tag: suite::iserv, role::plugin, status::highlighted, status::experimental
