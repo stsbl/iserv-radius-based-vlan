@@ -10,6 +10,8 @@ use IServ\CoreBundle\Entity\Group;
 use IServ\CoreBundle\Entity\Role;
 use IServ\CrudBundle\Entity\CrudInterface;
 use IServ\RoomBundle\Entity\Room;
+use Stsbl\RadiusVlanBundle\Validator\Constraints as VlanAssert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /*
@@ -40,14 +42,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Stsbl\RadiusVlanBundle\Vlan\Repository\DoctrineVlanRepository")
  * @ORM\Table(name="radius_vlan")
+ * @DoctrineAssert\UniqueEntity(fields={"description", "priority"})
  */
 class Vlan implements CrudInterface
 {
     /**
      * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false, unique=true)
+     * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var int|null
      */
@@ -63,7 +67,7 @@ class Vlan implements CrudInterface
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Range(min=1, max=4095, invalidMessage="The VLAN must be a value between 1 and 4095.")
+     * @Assert\Range(min=1, max=4095, invalidMessage="The VLAN ID must be a value between 1 and 4095.")
      * @ORM\Column(name="vlan_id", type="integer", nullable=false, unique=false)
      *
      * @var int|null
@@ -87,7 +91,7 @@ class Vlan implements CrudInterface
     private $room;
 
     /**
-     * @Assert\Ip()
+     * @VlanAssert\IpRange(version="4")
      * @ORM\Column(name="ip_range", type="inet", nullable=true, unique=false)
      *
      * @var string|null
@@ -96,9 +100,9 @@ class Vlan implements CrudInterface
 
     /**
      * @ORM\JoinTable(name="radius_vlan_group", joinColumns={
-     *        @ORM\JoinColumn(name="vlan_id", referencedColumnName="vlan_id", nullable=false, unique=false)
+     *        @ORM\JoinColumn(name="vlan_id", referencedColumnName="id", nullable=false, unique=false)
      *     }, inverseJoinColumns={
-     *        @ORM\JoinColumn(name="group", referencedColumnName="act", nullable=false, unique=false)
+     *        @ORM\JoinColumn(name="grp", referencedColumnName="act", nullable=false, unique=false)
      *     }
      * )
      * @ORM\ManyToMany(targetEntity="IServ\CoreBundle\Entity\Group")
@@ -108,7 +112,7 @@ class Vlan implements CrudInterface
 
     /**
      * @ORM\JoinTable(name="radius_vlan_role", joinColumns={
-     *         @ORM\JoinColumn(name="vlan_id", referencedColumnName="vlan_id", nullable=false, unique=false)
+     *         @ORM\JoinColumn(name="vlan_id", referencedColumnName="id", nullable=false, unique=false)
      *     }, inverseJoinColumns={
      *         @ORM\JoinColumn(name="role", referencedColumnName="role", nullable=false, unique=false)
      *     }

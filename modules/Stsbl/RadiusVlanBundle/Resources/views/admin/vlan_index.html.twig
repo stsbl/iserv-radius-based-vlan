@@ -1,0 +1,10 @@
+{% extends '@IServCrud/Crud/index.html.twig' %}
+
+{%~ block content ~%}
+    <div class="panel panel-default">{{- '' -}}
+        <div class="panel-body">{{- '' -}}
+            {{- __('The VLANs will be evaluated descending by the priority column. You can move a single VLAN inside this list by using the action "%s" or "%s".', _('Move VLAN up in list'), _('Move VLAN down in list')) }}{{ '' ~}}
+        </div>{{- '' -}}
+    </div>
+    {{~ parent() -}}
+{%- endblock -%}

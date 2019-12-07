@@ -1,0 +1,7 @@
+Test "radius-based-vlan: migrate group property"
+  grep -q '^40radius-based-vlan_group$' /var/lib/iserv/config/update.log
+  ---
+  psql -v ON_ERROR_STOP=1 \
+      -c 'UPDATE radius_vlan_group SET grp = "group"' iserv postgres &&
+      echo 40radius-based-vlan_group >> /var/lib/iserv/config/update.log
+

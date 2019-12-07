@@ -3,12 +3,19 @@ declare(strict_types=1);
 
 namespace Stsbl\RadiusVlanBundle\Admin;
 
+use IServ\CrudBundle\Crud\Batch\DeleteAction;
 use IServ\CrudBundle\Crud\ServiceCrud;
+use IServ\CrudBundle\Entity\CrudInterface;
 use IServ\CrudBundle\Mapper\FormMapper;
 use IServ\CrudBundle\Mapper\ListMapper;
 use IServ\CrudBundle\Mapper\ShowMapper;
 use IServ\CrudBundle\Routing\RoutingDefinition;
+use IServ\HostBundle\Events\HostEvents;
+use IServ\HostBundle\Service\HostManager;
+use Psr\Container\ContainerInterface;
+use Stsbl\RadiusVlanBundle\Admin\Batch\SwapVlanAction;
 use Stsbl\RadiusVlanBundle\Entity\Vlan;
+use Stsbl\RadiusVlanBundle\Vlan\VlanManager;
 
 /*
  * The MIT License
@@ -43,11 +50,6 @@ final class VlanAdmin extends ServiceCrud
     public const TEMPLATE_PAGE = '@IServAdmin/page.html.twig';
     public const TEMPLATE_BASE = '@IServAdmin/Admin/base.html.twig';
 
-    /**
-     * {@inheritDoc}
-     */
-    protected static $entityClass = Vlan::class;
-
     // Set admin stuff
     // FIXME No ServiceAdmin base class yet
 
@@ -60,6 +62,52 @@ final class VlanAdmin extends ServiceCrud
     ];
 
     /**
+     * @var VlanManager
+     */
+    private $vlanManager;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected static $entityClass = Vlan::class;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function prePersist(CrudInterface $object, array $previousData = null): void
+    {
+        /** @var Vlan $object */
+        $object->setPriority($this->vlanManager->getNextFreePriority());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function postPersist(CrudInterface $object, array $previousData = null): void
+    {
+        $this->onChange();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function postRemove(CrudInterface $object, array $previousData = null): void
+    {
+        // Delay newhosts on batch delete
+        if ($this->getAction() !== self::ACTION_BATCH) {
+            $this->onChange();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function postUpdate(CrudInterface $object, array $previousData = null): void
+    {
+        $this->onChange();
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function configure(): void
@@ -67,6 +115,9 @@ final class VlanAdmin extends ServiceCrud
         $this->title = _('VLAN networks');
         $this->itemTitle = _('VLAN network');
         $this->options['sort'] = 'priority';
+        $this->templates['crud_index'] = '@StsblRadiusVlan/admin/vlan_index.html.twig';
+
+        $this->vlanManager = $this->locator->get(VlanManager::class);
     }
 
     /**
@@ -77,25 +128,32 @@ final class VlanAdmin extends ServiceCrud
         $listMapper
             ->addIdentifier('description', null, [
                 'label' => _('Description'),
+                'responsive' => 'all',
             ])
             ->add('vlanId', null, [
                 'label' => _('VLAN ID'),
+                'responsive' => 'all',
             ])
-            ->add('room', 'entity', [
+            ->add('room', null, [
                 'label' => _('Room'),
+                'responsive' => 'min-tablet',
             ])
             ->add('ipRange', null, [
                 'label' => _('IP range'),
+                'responsive' => 'min-tablet',
             ])
             ->add('groups', null, [
                 'label' => _('Groups'),
+                'responsive' => 'desktop',
             ])
             ->add('roles', null, [
                 'label' => _('Roles'),
+                'responsive' => 'desktop',
             ])
             ->add('priority', null, [
                 'label' => _('Order'),
                 'sortType' => 'natural',
+                'responsive' => 'desktop',
             ])
         ;
     }
@@ -111,18 +169,39 @@ final class VlanAdmin extends ServiceCrud
             ])
             ->add('vlanId', null, [
                 'label' => _('VLAN ID'),
+                'attr' => [
+                    'help_text' => _('This VLAN ID will be sent via RADIUS if one of the given conditions below match.'),
+                ]
             ])
             ->add('room', null, [
                 'label' => _('Room'),
+                'attr' => [
+                    'help_text' => _('This room will be assigned to hosts of users whose signed-in in via RADIUS with the WLAN module and are a member of one role or group set here. If left out, the hosts will get the default room from system configuration, if set.'),
+                ],
+                'required' => false,
             ])
             ->add('ipRange', null, [
                 'label' => _('IP range'),
+                'attr' => [
+                    'help_text' => _('Hosts in host management in this IP range will get the VLAN ID set here assigned on MAC-based RADIUS authentication.') . ' ' .
+                        _('Additionally, for hosts of users whose are a member of one role or group set here and signed-in via RADIUS with the WLAN module an IP from that range.') . ' ' .
+                        _('If left out, this VLAN is not accounted for MAC-based RADIUS authentication and hosts of RADIUS users will get an IP address from the range from system configuration.'),
+                ],
+                'required' => false,
             ])
             ->add('groups', null, [
                 'label' => _('Groups'),
+                'attr' => [
+                    'help_text' => _('Match this VLAN only to members of at least one of these groups (does not have an effect on MAC-based RADIUS authentication).') . ' ' .
+                        _('If neither a group or role set, this VLAN is not accounted for user-based RADIUS authentication.'),
+                ]
             ])
             ->add('roles', null, [
                 'label' => _('Roles'),
+                'attr' => [
+                    'help_text' => _('Match this VLAN only to members of at least one of these roles (does not have an effect on MAC-based RADIUS authentication).') . ' ' .
+                        _('If neither a group or role set, this VLAN is not accounted for user-based RADIUS authentication.'),
+                ]
             ])
         ;
     }
@@ -154,6 +233,23 @@ final class VlanAdmin extends ServiceCrud
         ;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function loadBatchActions(): void
+    {
+        parent::loadBatchActions();
+
+        $this->batchActions->get(DeleteAction::NAME)->setCallback([$this, 'onChange']);
+
+        $this->batchActions->add(new SwapVlanAction($this, $this->vlanManager, true));
+        $this->batchActions->add(new SwapVlanAction($this, $this->vlanManager, false));
+    }
+
+    public function onChange(): void
+    {
+        $this->eventDispatcher()->dispatch(HostEvents::HOST_CHANGED);
+    }
 
     /**
      * {@inheritDoc}
@@ -167,5 +263,13 @@ final class VlanAdmin extends ServiceCrud
         $routes->setPathPrefix('/admin/');
 
         return $routes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function getSubscribedServices(): array
+    {
+        return \array_merge(parent::getSubscribedServices(), [VlanManager::class]);
     }
 }
