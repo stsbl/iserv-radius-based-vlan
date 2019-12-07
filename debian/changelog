@@ -3,7 +3,7 @@ stsbl-iserv-radius-based-vlan (19.12.08-1) stable; urgency=medium
   * Added management UI
   * Updated description
 
-  iserv: Benutzeroberfläche zum Konfiguration von VLAN-Netzwerken hinzugefügt.
+  iserv: Benutzeroberfläche zur Konfiguration von VLAN-Netzwerken hinzugefügt.
     Diese kann unter Verwaltung » Netzwerke » VLAN-Netzwerke aufgerufen
     werden.
 
