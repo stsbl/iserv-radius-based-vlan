@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autoconfigure: true
+        autowire: true
+        public: false
+
+    Stsbl\RadiusVlanBundle\:
+        resource: '../../'
+        exclude: '../../{Entity,Resources,Tests}'
+
+    Stsbl\RadiusVlanBundle\Vlan\Repository\VlanRepositoryInterface: '@Stsbl\RadiusVlanBundle\Vlan\Repository\DoctrineVlanRepository'
