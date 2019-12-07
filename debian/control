@@ -15,6 +15,8 @@ Depends: ${misc:Depends},
   iserv-server-freeradius,
   iserv-server-openldap (>= 19.11.19),
   iserv-user-backend (>= 19.10.29),
+  libbytes-random-secure-perl,
+  libdigest-md4-perl,
 Suggests: iserv-wlan,
 Description: RADIUS-basierte VLAN-Unterstützung für IServ (EXPERIMENTELL)
  Erlaubt die Zuweisung von VLAN-Netzwerken an Benutzer und Geräte über den

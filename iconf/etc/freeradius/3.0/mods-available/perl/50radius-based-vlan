@@ -1,0 +1,6 @@
+# created by iconf for iserv-felix.jacobi on 2019-11-30 04:17:25
+
+perl perl_vlan {
+	filename = /usr/lib/iserv/radius_vlan
+}
+

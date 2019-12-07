@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+use Bytes::Random::Secure;
+use Digest::MD4 qw(md4_hex);
+use Encode qw(encode);
+
+use vars qw(%RAD_REQUEST %RAD_REPLY %RAD_CHECK);
+
+# https://wiki.freeradius.org/modules/Rlm_perl
+use constant RLM_MODULE_REJECT =>    0; # immediately reject the request
+use constant RLM_MODULE_FAIL =>      1; # module failed, don't reply
+use constant RLM_MODULE_OK =>        2; # the module is OK, continue
+use constant RLM_MODULE_HANDLED =>   3; # the module handled the request, so stop
+use constant RLM_MODULE_INVALID =>   4; # the module considers the request invalid
+use constant RLM_MODULE_USERLOCK =>  5; # reject the request (user is locked out)
+use constant RLM_MODULE_NOTFOUND =>  6; # user not found
+use constant RLM_MODULE_NOOP =>      7; # module succeeded without doing anything
+use constant RLM_MODULE_UPDATED =>   8; # OK (pairs modified)
+use constant RLM_MODULE_NUMCODES =>  9; # how many return codes there are
+
+sub crypt_auto($)
+{
+  my ($pw) = @_;
+  my $sel = join "", "A".."Z", "a".."z", "0".."9", ".", "/";
+  my $rnd = Bytes::Random::Secure->new(NonBlocking => 1);
+  my $salt = $rnd->string_from($sel, 8);
+  my $res = crypt $pw, "\$6\$$salt";
+  $res =~ /^[A-Za-z0-9.\/\$]{1,256}$/; # untaint
+  $&;
+}
+
+sub canonicalize_mac_part($)
+{
+  lc shift . ":";
+}
+
+# FIXME needs fake MSCHAP-V2-Challenge im some way to allow authentication
+# to always succeed
+sub authorize
+{
+  my $pw = my $user = $RAD_REQUEST{'User-Name'};
+  $user =~ s/([A-F0-9]{2})(?::-\.)?/canonicalize_mac_part($1)/gie;
+  $user =~ s/:$//g;
+  $RAD_REQUEST{'Stripped-User-Name'} = $user;
+
+  $RAD_CHECK{'NT-Password'} = md4_hex(encode("UTF-16LE", $pw));
+  $RAD_CHECK{'Password-With-Header'} = '{crypt}' . crypt_auto $pw;
+
+  delete $RAD_REQUEST{'CHAP-Password'}; # Hide CHAP password from modules, so
+                                        # that authentication always succeeds
+  return RLM_MODULE_OK;
+}
