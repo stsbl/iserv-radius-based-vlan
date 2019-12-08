@@ -1,3 +1,14 @@
+stsbl-iserv-radius-based-vlan (19.12.08-4) stable; urgency=medium
+
+  * Updated translations
+  * Added missing run of newhosts after swapping VLAN order
+  * Cleanup code
+  * Added bundle dependencies
+  * Newhosts: Moved chkldap to background
+  * Added privilege for managing VLANs
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Sun, 08 Dec 2019 16:44:58 +0100
+
 stsbl-iserv-radius-based-vlan (19.12.08-3) stable; urgency=medium
 
   * chkldap: Fixed usage of group column instead of grp column
