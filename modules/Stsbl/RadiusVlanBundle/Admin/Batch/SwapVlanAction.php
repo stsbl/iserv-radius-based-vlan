@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use IServ\CrudBundle\Contracts\CrudContract;
 use IServ\CrudBundle\Crud\Batch\AbstractBatchAction;
 use IServ\CrudBundle\Entity\FlashMessageBag;
+use Stsbl\RadiusVlanBundle\Admin\VlanAdmin;
 use Stsbl\RadiusVlanBundle\Vlan\VlanManager;
 
 /*
@@ -40,6 +41,11 @@ use Stsbl\RadiusVlanBundle\Vlan\VlanManager;
 final class SwapVlanAction extends AbstractBatchAction
 {
     /**
+     * @var VlanAdmin
+     */
+    protected $crud;
+
+    /**
      * @var VlanManager
      */
     private $vlanManager;
@@ -49,7 +55,7 @@ final class SwapVlanAction extends AbstractBatchAction
      */
     private $moveUp;
 
-    public function __construct(CrudContract $crud, VlanManager $vlanManager, bool $moveUp, bool $enabled = true)
+    public function __construct(VlanAdmin $crud, VlanManager $vlanManager, bool $moveUp, bool $enabled = true)
     {
         parent::__construct($crud, $enabled);
 
@@ -111,6 +117,8 @@ final class SwapVlanAction extends AbstractBatchAction
                 $flashMessages->addSuccess(__('Moved VLAN %s down in list.', $vlan));
             }
         }
+
+        $this->crud->onChange();
 
         return $flashMessages;
     }
