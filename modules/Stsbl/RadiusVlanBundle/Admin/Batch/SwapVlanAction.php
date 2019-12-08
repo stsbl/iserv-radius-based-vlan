@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Stsbl\RadiusVlanBundle\Admin\Batch;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use IServ\CrudBundle\Contracts\CrudContract;
 use IServ\CrudBundle\Crud\Batch\AbstractBatchAction;
 use IServ\CrudBundle\Entity\FlashMessageBag;
 use Stsbl\RadiusVlanBundle\Admin\VlanAdmin;
