@@ -52,4 +52,4 @@ Description: RADIUS-basierte VLAN-Unterstützung für IServ (EXPERIMENTELL)
  .
  HINWEIS: Dieses Modul baut auf neuen experimentellen Funktionen von IServ auf
  und enthält daher noch möglicherweise Fehler.
-Tag: suite::iserv, role::plugin, status::highlighted, status::experimental
+Tag: suite::iserv:portal, role::plugin, status::highlighted, status::experimental

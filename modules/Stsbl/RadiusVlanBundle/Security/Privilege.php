@@ -1,13 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Stsbl\RadiusVlanBundle\EventListener;
-
-use IServ\AdminBundle\Event\Events;
-use IServ\AdminBundle\EventListener\AdminMenuListenerInterface;
-use IServ\CoreBundle\Event\MenuEvent;
-use Stsbl\RadiusVlanBundle\Security\Privilege;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+namespace Stsbl\RadiusVlanBundle\Security;
 
 /*
  * The MIT License
@@ -37,29 +31,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-final class AdminMenuSubcriber implements EventSubscriberInterface, AdminMenuListenerInterface
+final class Privilege
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function onBuildAdminMenu(MenuEvent $event): void
-    {
-        if ($event->getAuthorizationChecker()->isGranted(Privilege::RADIUS_VLAN)) {
-            $item = $event->getMenu(self::ADMIN_NETWORK)->addChild('vlan', [
-                'route' => 'admin_vlan_index',
-                'label' => _('VLAN networks'),
-            ]);
-
-            $item->setExtra('icon', 'switch-network');
-            $item->setExtra('icon_style', 'fugue');
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [Events::MENU => 'onBuildAdminMenu'];
-    }
+    public const RADIUS_VLAN = 'PRIV_RADIUS_VLAN';
 }

@@ -1,0 +1,5 @@
+priv.radius_vlan:
+module      RADIUS-based VLAN support
+title       Manage VLAN networks for RADIUS
+description Users with this privilege can manage the VLAN networks in Administration » Network » VLAN networks.
+assignroles admin

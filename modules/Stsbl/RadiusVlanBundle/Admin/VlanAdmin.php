@@ -11,10 +11,9 @@ use IServ\CrudBundle\Mapper\ListMapper;
 use IServ\CrudBundle\Mapper\ShowMapper;
 use IServ\CrudBundle\Routing\RoutingDefinition;
 use IServ\HostBundle\Events\HostEvents;
-use IServ\HostBundle\Service\HostManager;
-use Psr\Container\ContainerInterface;
 use Stsbl\RadiusVlanBundle\Admin\Batch\SwapVlanAction;
 use Stsbl\RadiusVlanBundle\Entity\Vlan;
+use Stsbl\RadiusVlanBundle\Security\Privilege;
 use Stsbl\RadiusVlanBundle\Vlan\VlanManager;
 
 /*
@@ -231,6 +230,14 @@ final class VlanAdmin extends ServiceCrud
                 'label' => _('Roles'),
             ])
         ;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isAuthorized(): bool
+    {
+        return $this->isGranted(Privilege::RADIUS_VLAN);
     }
 
     /**

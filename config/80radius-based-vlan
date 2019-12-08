@@ -1,6 +1,6 @@
 RadiusBasedVlanFallbackId:
 name		Fallback VLAN ID for authentication
 description	A value between 1 and 4095. This VLAN ID will be assigned to users or hosts whose don't received an explit VLAN ID via an IP range or a group or role membership. Use 0 to not use a fallback VLAN ID.
-group		Module: RADIUS-based VLAN
+group		Module: RADIUS-based VLAN support
 type		int
 default		0
