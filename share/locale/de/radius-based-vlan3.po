@@ -27,13 +27,13 @@ msgid ""
 "The VLANs will be evaluated descending by the priority column. You can move "
 "a single VLAN inside this list by using the action \"%s\" or \"%s\"."
 msgstr ""
-"Die VLANs werden in absteigener Reihenfolge nach der Spalte Reihenfolge "
+"Die VLANs werden in absteigender Reihenfolge nach der Spalte Reihenfolge "
 "geprüft. Sie können ein einzelnes VLAN innerhalb dieser Liste mittels der "
 "Aktion \"%s\" oder \"%s\" verschieben."
 
 #: modules/Stsbl/RadiusVlanBundle/Admin/Batch/SwapVlanAction.php:100
 msgid "You can only move one VLAN at a time."
-msgstr "Sie können nur ein VLAN auf einmal verschieben"
+msgstr "Sie können nur ein VLAN auf einmal verschieben."
 
 #: modules/Stsbl/RadiusVlanBundle/Admin/Batch/SwapVlanAction.php:108
 #, php-format
