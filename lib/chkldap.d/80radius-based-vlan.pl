@@ -33,7 +33,7 @@ SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
     r1.priority
   FROM radius_vlan r1
     INNER JOIN radius_vlan_group vg ON r1.id = vg.vlan_id
-    INNER JOIN members m ON vg.group = m.actgrp
+    INNER JOIN members m ON vg.grp = m.actgrp
   UNION
   SELECT ur.act AS actuser, r2.vlan_id, r2.priority FROM radius_vlan r2
     INNER JOIN radius_vlan_role vr ON r2.id = vr.vlan_id
@@ -104,7 +104,7 @@ SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
     r1.priority
   FROM radius_vlan r1
     INNER JOIN radius_vlan_group vg ON r1.id = vg.vlan_id
-    INNER JOIN members m ON vg.group = m.actgrp
+    INNER JOIN members m ON vg.grp = m.actgrp
   UNION
   SELECT ur.act AS actuser, r2.vlan_id, r2.priority FROM radius_vlan r2
     INNER JOIN radius_vlan_role vr ON r2.id = vr.vlan_id
