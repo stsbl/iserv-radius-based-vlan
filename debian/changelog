@@ -1,3 +1,9 @@
+stsbl-iserv-radius-based-vlan (19.12.11-2) testing; urgency=medium
+
+  * wifi_vlan_host_login: Fixed group column
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Wed, 11 Dec 2019 04:32:14 +0100
+
 stsbl-iserv-radius-based-vlan (19.12.11-1) testing; urgency=medium
 
   * newhosts: Use chkldap cache
