@@ -1,0 +1,19 @@
+Test "select wlan_radius-based-vlan.sql"
+  if dpkg-query -Wf '${Status}' iserv-wlan 2>/dev/null | grep -qE '^(install|hold) ok (unpacked|installed)$'
+  then
+    SQL="/usr/share/iserv/radius-based-vlan/db/wlan_radius-based-vlan.sql"
+  else
+    SQL="/usr/share/iserv/radius-based-vlan/db/wlan_radius-based-vlan_fallback.sql"
+  fi
+
+  update-alternatives --query wlan_radius-based-vlan.sql | grep '^Value: '"$SQL"'$'
+  ---
+  if dpkg-query -Wf '${Status}' iserv-wlan 2>/dev/null | grep -qE '^(install|hold) ok (unpacked|installed)$'
+  then
+    SQL="/usr/share/iserv/radius-based-vlan/db/wlan_radius-based-vlan.sql"
+  else
+    SQL="/usr/share/iserv/radius-based-vlan/db/wlan_radius-based-vlan_fallback.sql"
+  fi
+
+  update-alternatives --set wlan_radius-based-vlan.sql "$SQL"
+

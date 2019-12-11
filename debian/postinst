@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]
+then
+  update-alternatives --install /usr/share/iserv/db/wlan_radius-based-vlan.sql \
+      wlan_radius-based-vlan.sql \
+      /usr/share/iserv/radius-based-vlan/db/wlan_radius-based-vlan_fallback.sql 10
+  update-alternatives --install /usr/share/iserv/db/wlan_radius-based-vlan.sql \
+      wlan_radius-based-vlan.sql \
+      /usr/share/iserv/radius-based-vlan/db/wlan_radius-based-vlan.sql 10
+fi
+
+#DEBHELPER#

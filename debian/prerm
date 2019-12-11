@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+if ! [ "$1" = "upgrade" ]
+then
+  update-alternatives --remove wlan_radius-based-vlan.sql \
+      /usr/share/iserv/radius-based-vlan/db/wlan_radius-based-vlan_fallback.sql
+  update-alternatives --remove wlan_radius-based-vlan.sql \
+      /usr/share/iserv/radius-based-vlan/db/wlan_radius-based-vlan.sql
+  rm -f /usr/share/iserv/db/wlan_radius-based-vlan.sql
+fi
+
+#DEBHELPER#
