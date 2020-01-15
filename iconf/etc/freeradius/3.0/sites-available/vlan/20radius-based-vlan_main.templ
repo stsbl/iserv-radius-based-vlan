@@ -49,9 +49,11 @@ then
   done
 fi)
 
-	# Restrict wifi server to use tunneled eap methods (no user 
-	# database available here).
 	authorize {
+		perl_vlan
+		ldap_hosts
+		pap
+
 		preprocess
 		suffix
 	#	ntdomain
@@ -63,14 +65,13 @@ fi)
 		eap {
 			ok = return
 		}
-		ok
 		expiration
 		logintime
 	}
 
 	authenticate {
-		ok
 		eap
+		pap
 	}
 	
 	post-auth {

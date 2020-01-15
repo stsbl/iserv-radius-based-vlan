@@ -20,6 +20,10 @@ use constant RLM_MODULE_NOOP =>      7; # module succeeded without doing anythin
 use constant RLM_MODULE_UPDATED =>   8; # OK (pairs modified)
 use constant RLM_MODULE_NUMCODES =>  9; # how many return codes there are
 
+my $m_mac_nibble = qr/([0-9A-Fa-f]{2})/;
+my $m_mac_separator = qr/(?:[:-])?/;
+my $m_mac_part = qr/($m_mac_nibble)$m_mac_separator/;
+
 sub crypt_auto($)
 {
   my ($pw) = @_;
@@ -41,14 +45,15 @@ sub canonicalize_mac_part($)
 sub authorize
 {
   my $pw = my $user = $RAD_REQUEST{'User-Name'};
-  $user =~ s/([A-F0-9]{2})(?::-\.)?/canonicalize_mac_part($1)/gie;
+  $user =~ s/$m_mac_part/canonicalize_mac_part($1)/gie;
   $user =~ s/:$//g;
   $RAD_REQUEST{'Stripped-User-Name'} = $user;
 
   $RAD_CHECK{'NT-Password'} = md4_hex(encode("UTF-16LE", $pw));
   $RAD_CHECK{'Password-With-Header'} = '{crypt}' . crypt_auto $pw;
+  $RAD_CHECK{'Cleartext-Password'} = $pw;
 
-  delete $RAD_REQUEST{'CHAP-Password'}; # Hide CHAP password from modules, so
-                                        # that authentication always succeeds
   return RLM_MODULE_OK;
 }
+
+1;
