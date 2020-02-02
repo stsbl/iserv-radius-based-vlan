@@ -1,3 +1,10 @@
+stsbl-iserv-radius-based-vlan (20.02.02-1) stable; urgency=medium
+
+  * Fixed MAC-based address authorization
+    Special thanks to Lino Jorzick for helpful indications!
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Sun, 02 Feb 2020 04:14:22 +0100
+
 stsbl-iserv-radius-based-vlan (19.12.11-2) testing; urgency=medium
 
   * wifi_vlan_host_login: Fixed group column
