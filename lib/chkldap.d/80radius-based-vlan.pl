@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use IServ::Conf;
 use IServ::DB;
+use Net::LDAP::Util qw(escape_filter_value escape_dn_value);
 
 my $fallback_vlan_id = $conf->{RadiusBasedVlanFallbackId} // undef;
 
@@ -152,7 +153,7 @@ my %rooms = IServ::DB::SelectAll_Hash "SELECT name, room_no, uuid FROM rooms";
 # not get the object class "radiusprofile".
 for my $act (sort keys %users)
 {
-  ::want ::dn(cn => $act, ou => "users"),
+  ::want ::dn(cn => escape_filter_value(escape_dn_value($act)), ou => "users"),
     objectClass => [
       "radiusprofile"
     ],
@@ -173,8 +174,8 @@ for my $act (sort keys %users)
 # * uuid
 for my $name (sort keys %rooms)
 {
-  ::want ::dn(cn => $name, ou => "rooms"),
-    cn => $name,
+  ::want ::dn(cn => escape_dn_value($name), ou => "rooms"),
+    cn => escape_filter_value($name),
     objectClass => [
       "room",
       "uuidObject"
@@ -200,8 +201,8 @@ for my $name (sort keys %rooms)
 # * add radiusProfile to all hosts which have a VLAN ID
 for my $name (sort keys %hosts)
 {
-  ::want ::dn(cn => $name, ou => "hosts"),
-    cn => $name,
+  ::want ::dn(cn => escape_dn_value($name), ou => "hosts"),
+    cn => escape_filter_value($name),
     objectClass => [
       "device",
       "ieee802Device",
@@ -219,7 +220,7 @@ for my $name (sort keys %hosts)
 
   if (defined $hosts{$name}{vlan_id})
   {
-    ::want ::dn(cn => $name, ou => "hosts"),
+    ::want ::dn(cn => escape_dn_value($name), ou => "hosts"),
       objectClass => [
         "radiusprofile",
       ],
@@ -230,7 +231,7 @@ for my $name (sort keys %hosts)
 
   if (defined $hosts{$name}{room})
   {
-    ::want ::dn(cn => $name, ou => "hosts"),
+    ::want ::dn(cn => escape_dn_value($name), ou => "hosts"),
       memberOf => ::dn(cn => $hosts{$name}{room}, ou => "rooms"),
     ;
   }

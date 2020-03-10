@@ -22,6 +22,7 @@ Depends: ${misc:Depends},
   iserv3-room,
   libbytes-random-secure-perl,
   libdigest-md4-perl,
+  libnet-ldap-perl,
 Suggests: iserv-wlan,
 Description: RADIUS-basierte VLAN-Unterstützung für IServ (EXPERIMENTELL)
  Erlaubt die Zuweisung von VLAN-Netzwerken an Benutzer und Geräte über den
