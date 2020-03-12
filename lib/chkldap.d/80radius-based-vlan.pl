@@ -153,7 +153,7 @@ my %rooms = IServ::DB::SelectAll_Hash "SELECT name, room_no, uuid FROM rooms";
 # not get the object class "radiusprofile".
 for my $act (sort keys %users)
 {
-  ::want ::dn(cn => escape_filter_value(escape_dn_value($act)), ou => "users"),
+  ::want ::dn(cn => escape_dn_value($act), ou => "users"),
     objectClass => [
       "radiusprofile"
     ],
@@ -175,7 +175,7 @@ for my $act (sort keys %users)
 for my $name (sort keys %rooms)
 {
   ::want ::dn(cn => escape_dn_value($name), ou => "rooms"),
-    cn => escape_filter_value($name),
+    cn => escape_dn_value($name),
     objectClass => [
       "room",
       "uuidObject"
@@ -202,7 +202,7 @@ for my $name (sort keys %rooms)
 for my $name (sort keys %hosts)
 {
   ::want ::dn(cn => escape_dn_value($name), ou => "hosts"),
-    cn => escape_filter_value($name),
+    cn => escape_dn_value($name),
     objectClass => [
       "device",
       "ieee802Device",
