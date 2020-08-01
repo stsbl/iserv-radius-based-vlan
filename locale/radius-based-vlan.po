@@ -1,0 +1,197 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: stsbl-iserv-radius-based-vlan\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-08 00:47+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: config/80radius-based-vlan
+msgid ""
+"A value between 1 and 4095. This VLAN ID will be assigned to users or hosts "
+"whose don't received an explit VLAN ID via an IP range or a group or role "
+"membership. Use 0 to not use a fallback VLAN ID."
+msgstr ""
+"Ein Wert zwischen 1 und 4095. Diese VLAN-ID wird an Benutzer oder Geräte "
+"zugewiesen, welche keine explizite VLAN-ID über einen IP-Bereich oder eine "
+"Gruppen- oder Rollenmitgliedschaft erhalten haben. Benutzen Sie den Wert 0, "
+"um keine Rückfall-VLAN-ID zu konfigurieren."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid ""
+"Additionally, for hosts of users whose are a member of one role or group set "
+"here and signed-in via RADIUS with the WLAN module an IP from that range."
+msgstr ""
+"Zusätzlich wird Geräten von Benutzern, die Mitglied von einer der hier "
+"gesetzten Gruppen oder Rollen sind und sich über RADIUS mit dem WLAN-Modul "
+"angemeldet haben, eine IP-Adresse aus diesem Bereich zugewiesen."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid "Description"
+msgstr "Beschreibung"
+
+#: config/80radius-based-vlan
+msgid "Fallback VLAN ID for authentication"
+msgstr "Rückfall-VLAN-ID für die Authentifizierung"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid "Groups"
+msgstr "Gruppen"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid ""
+"Hosts in host management in this IP range will get the VLAN ID set here "
+"assigned on MAC-based RADIUS authentication."
+msgstr ""
+"Geräte in der Geräteverwaltung in diesem Bereich bekommen die hier gesetzte "
+"VLAN-ID bei der MAC-basierten RADIUS-Authentifizierung zugewiesen."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid "IP range"
+msgstr "IP-Bereich"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid ""
+"If left out, this VLAN is not accounted for MAC-based RADIUS authentication "
+"and hosts of RADIUS users will get an IP address from the range from system "
+"configuration."
+msgstr ""
+"Wenn dieser Wert leer gelassen wird, wird dieses VLAN nicht für die MAC-"
+"basierte RADIUS-Authentifizierung berücksichtigt und Geräte von RADIUS-"
+"Benutzern werden eine IP-Adress aus dem Bereich der Systemkonfiguration "
+"erhalten."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid ""
+"If neither a group or role set, this VLAN is not accounted for user-based "
+"RADIUS authentication."
+msgstr ""
+"Wenn keine Gruppe oder Rolle gesetzt ist, wird dieses VLAN nicht für die "
+"benutzerbasierte RADIUS-Authentifzierung berücksichtigt."
+
+#: priv/radius-based-vlan
+msgid "Manage VLAN networks for RADIUS"
+msgstr "VLAN-Netzwerke für RADIUS verwalten"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid ""
+"Match this VLAN only to members of at least one of these groups (does not "
+"have an effect on MAC-based RADIUS authentication)."
+msgstr ""
+"Dieses VLAN nur Mitgliedern von mindestens einer dieser Gruppen zuordnen "
+"(hat keine keine Auswirkung für die MAC-basierte RADIUS-Authentifizierung)."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid ""
+"Match this VLAN only to members of at least one of these roles (does not "
+"have an effect on MAC-based RADIUS authentication)."
+msgstr ""
+"Dieses VLAN nur Mitgliedern von mindestens einer dieser Rollen zuordnen (hat "
+"keine keine Auswirkung für die MAC-basierte RADIUS-Authentifizierung)."
+
+#: config/80radius-based-vlan
+msgid "Module: RADIUS-based VLAN support"
+msgstr "Modul: RADIUS-basierte VLAN-Unterstützung"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/Batch/SwapVlanAction.php
+#: /tmp/twig2php-stsbl-iserv-radius-based-vlan/modules/Stsbl/RadiusVlanBundle/Resources/views/admin/vlan_index.html.twig.php
+msgid "Move VLAN down in list"
+msgstr "VLAN nach unten verschieben"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/Batch/SwapVlanAction.php
+#: /tmp/twig2php-stsbl-iserv-radius-based-vlan/modules/Stsbl/RadiusVlanBundle/Resources/views/admin/vlan_index.html.twig.php
+msgid "Move VLAN up in list"
+msgstr "VLAN nach oben verschieben"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/Batch/SwapVlanAction.php
+#, php-format
+msgid "Moved VLAN %s down in list."
+msgstr "VLAN %s nach unten verschoben."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/Batch/SwapVlanAction.php
+#, php-format
+msgid "Moved VLAN %s up in list."
+msgstr "VLAN %s nach oben verschoben."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid "Order"
+msgstr "Reihenfolge"
+
+#: priv/radius-based-vlan
+msgid "RADIUS-based VLAN support"
+msgstr "RADIUS-basierte VLAN-Unterstützung"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid "Roles"
+msgstr "Rollen"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid "Room"
+msgstr "Raum"
+
+#: modules/Stsbl/RadiusVlanBundle/Resources/translations/messages.php
+msgid "The VLAN ID must be a value between 1 and 4095."
+msgstr "Die VLAN-ID muss ein Wert zwischen 1 und 4095 sein."
+
+#: /tmp/twig2php-stsbl-iserv-radius-based-vlan/modules/Stsbl/RadiusVlanBundle/Resources/views/admin/vlan_index.html.twig.php
+#, php-format
+msgid ""
+"The VLANs will be evaluated descending by the priority column. You can move "
+"a single VLAN inside this list by using the action \"%s\" or \"%s\"."
+msgstr ""
+"Die VLANs werden in absteigender Reihenfolge nach der Spalte Reihenfolge "
+"geprüft. Sie können ein einzelnes VLAN innerhalb dieser Liste mittels der "
+"Aktion \"%s\" oder \"%s\" verschieben."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid ""
+"This VLAN ID will be sent via RADIUS if one of the given conditions below "
+"match."
+msgstr ""
+"Diese VLAN-ID wird über RADIUS gesendet, wenn eine der unten gegebenen "
+"Bedinungen zutrifft."
+
+#: modules/Stsbl/RadiusVlanBundle/Validator/Constraints/IpRange.php
+msgid "This is not a valid IP range."
+msgstr "Dies ist kein gültiger IP-Bereich."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid ""
+"This room will be assigned to hosts of users whose signed-in in via RADIUS "
+"with the WLAN module and are a member of one role or group set here. If left "
+"out, the hosts will get the default room from system configuration, if set."
+msgstr ""
+"Dieser Raum an Geräte von Benutzern zugewiesen, die sich über RADIUS mit dem "
+"WLAN-Modul angemeldet haben und Mitglied einer der hier gesetzten Gruppen "
+"oder Rollen sind. Wenn dieser Wert ausgelessen wird, erhalten die Geräte den "
+"Standardraum aus der Systemkonfiguration, wenn dieser gesetzt ist."
+
+#: priv/radius-based-vlan
+msgid ""
+"Users with this privilege can manage the VLAN networks in Administration » "
+"Network » VLAN networks."
+msgstr ""
+"Benutzer mit diesem Recht können die VLAN-Netzwerke unter Verwaltung » "
+"Netzwerk » VLAN-Netzwerke verwalten."
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid "VLAN ID"
+msgstr "VLAN-ID"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+msgid "VLAN network"
+msgstr "VLAN-Netzwerk"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
+#: modules/Stsbl/RadiusVlanBundle/EventListener/AdminMenuSubcriber.php
+msgid "VLAN networks"
+msgstr "VLAN-Netzwerke"
+
+#: modules/Stsbl/RadiusVlanBundle/Admin/Batch/SwapVlanAction.php
+msgid "You can only move one VLAN at a time."
+msgstr "Sie können nur ein VLAN auf einmal verschieben."
