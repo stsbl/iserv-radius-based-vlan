@@ -1,3 +1,10 @@
+stsbl-iserv-radius-based-vlan (20.08.02-1) testing; urgency=medium
+
+  * Bumped copyright
+  * Updated locale handling to use genpo
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Sun, 02 Aug 2020 07:32:27 +0200
+
 stsbl-iserv-radius-based-vlan (20.03.12-1) stable; urgency=medium
 
   * chkldap: Fixed mixed escape_filter_value and escape_dn_value
