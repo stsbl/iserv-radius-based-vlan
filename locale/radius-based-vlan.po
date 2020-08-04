@@ -63,7 +63,7 @@ msgid ""
 msgstr ""
 "Wenn dieser Wert leer gelassen wird, wird dieses VLAN nicht für die MAC-"
 "basierte RADIUS-Authentifizierung berücksichtigt und Geräte von RADIUS-"
-"Benutzern werden eine IP-Adress aus dem Bereich der Systemkonfiguration "
+"Benutzern werden eine IP-Adresse aus dem Bereich der Systemkonfiguration "
 "erhalten."
 
 #: modules/Stsbl/RadiusVlanBundle/Admin/VlanAdmin.php
