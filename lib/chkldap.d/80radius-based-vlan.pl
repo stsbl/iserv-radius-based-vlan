@@ -110,7 +110,7 @@ SELECT DISTINCT ON (actuser) actuser, vlan_id, priority FROM (
   SELECT ur.act AS actuser, r2.vlan_id, r2.priority FROM radius_vlan r2
     INNER JOIN radius_vlan_role vr ON r2.id = vr.vlan_id
     INNER JOIN user_roles ur ON ur.role = vr.role
-) AS q
+) AS q ORDER BY q.actuser, q.priority
 SQL
   ;
   %hosts = IServ::DB::SelectAll_Hash <<SQL
