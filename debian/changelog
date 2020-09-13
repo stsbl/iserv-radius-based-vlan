@@ -1,3 +1,10 @@
+stsbl-iserv-radius-based-vlan (20.09.13-1) stable; urgency=medium
+
+  * Fixed missing ORDER BY clause in case that fallback VLAN is not
+    enabled
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Sun, 13 Sep 2020 05:40:37 +0200
+
 stsbl-iserv-radius-based-vlan (20.08.04-1) stable; urgency=medium
 
   * Updated license copyright
