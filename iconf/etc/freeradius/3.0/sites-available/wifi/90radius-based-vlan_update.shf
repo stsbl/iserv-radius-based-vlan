@@ -1,10 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 
-sed -E '/^\tpost-auth \{/a\
+. /usr/lib/iserv/cfg
+
+SCRIPT='/^\tpost-auth \{/a\
 \t\tupdate {\
 \t\t\t&reply:Tunnel-Type := &session-state:Tunnel-Type\
 \t\t\t&reply:Tunnel-Medium-Type := &session-state:Tunnel-Medium-Type\
-\t\t\t&reply:Tunnel-Private-Group-Id := &session-state:Tunnel-Private-Group-Id\
-\t\t}\
+\t\t\t&reply:Tunnel-Private-Group-Id := &session-state:Tunnel-Private-Group-Id\'
+
+if [ -n "$RadiusBasedVlanFallbackId" ]
+then
+  SCRIPT+='
+\t\t\t&reply:Tunnel-Type = VLAN\
+\t\t\t&reply:Tunnel-Medium-Type = IEEE-802\
+\t\t\t&reply:Tunnel-Private-Group-ID = '"'$RadiusBasedVlanFallbackId'"'\
+'
+fi
+
+SCRIPT+='\t\t}\
 '
 
+sed -E "$SCRIPT"

@@ -81,7 +81,12 @@ fi)
 		update {
 			&reply:Tunnel-Type := &session-state:Tunnel-Type
 			&reply:Tunnel-Medium-Type := &session-state:Tunnel-Medium-Type
-			&reply:Tunnel-Private-Group-Id := &session-state:Tunnel-Private-Group-Id
+			&reply:Tunnel-Private-Group-Id := &session-state:Tunnel-Private-Group-Id$(
+[ -n "$RadiusBasedVlanFallbackId" ] && echo -e "
+\t\t\t&reply:Tunnel-Type = VLAN
+\t\t\t&reply:Tunnel-Medium-Type = IEEE-802
+\t\t\t&reply:Tunnel-Private-Group-ID = '$RadiusBasedVlanFallbackId'
+")
 		}
 	}
 
