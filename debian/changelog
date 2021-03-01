@@ -1,3 +1,13 @@
+stsbl-iserv-radius-based-vlan (21.03.01-1) stable; urgency=medium
+
+  * Fixed Build-Depends
+  * Reworked package to remove requirement for LDAP configured by
+    iserv-server-freeradius
+    The LDAP access will be removed by a iserv-server-freeradius update in
+    near future.
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Mon, 01 Mar 2021 18:28:21 +0100
+
 stsbl-iserv-radius-based-vlan (20.10.22-1) stable; urgency=medium
 
   * Fixed fallback VLAN for non-encrypted authentication methods
