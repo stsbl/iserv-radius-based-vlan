@@ -1,4 +1,4 @@
-ldap ldap_hosts {
+ldap ldap_vlan_user {
 	#  Note that this needs to match the name(s) in the LDAP server
 	#  certificate, if you're using ldaps.  See OpenLDAP documentation
 	#  for the behavioral semantics of specifying more than one host.
@@ -16,8 +16,8 @@ ldap ldap_hosts {
 
 	#  Administrator account for searching and possibly modifying.
 	#  If using SASL + KRB5 these should be commented out.
-	identity = 'cn=freeradius,ou=ldap,$(cat /var/lib/iserv/server-openldap/ldapdn 2> /dev/null)'
-	password = $(cat /var/lib/iserv/server-openldap/pwd/freeradius.pwd)
+	identity = 'cn=radius-based-vlan,ou=ldap,$(cat /var/lib/iserv/server-openldap/ldapdn 2> /dev/null)'
+	password = $(cat /var/lib/iserv/server-openldap/pwd/radius-based-vlan.pwd)
 
 	#  Unless overridden in another section, the dn from which all
 	#  searches will start from.
@@ -101,7 +101,7 @@ ldap ldap_hosts {
 	#  the name value to be derived from an xlat expansion, or an
 	#  attribute ref.
 	update {
-		control:Password-With-Header	+= 'userPassword'
+#		control:Password-With-Header	+= 'userPassword'
 #		control:NT-Password		:= 'ntPassword'
 #		reply:Reply-Message		:= 'radiusReplyMessage'
 		reply:Tunnel-Type		:= 'radiusTunnelType'
@@ -141,7 +141,7 @@ ldap ldap_hosts {
 	#
 	user {
 		#  Where to start searching in the tree for users
-		base_dn = "ou=hosts,\${..base_dn}"
+		base_dn = "ou=users,\${..base_dn}"
 
 		#  Filter for user objects, should be specific enough
 		#  to identify a single user object.
@@ -149,7 +149,7 @@ ldap ldap_hosts {
 		#  For Active Directory, you should use
 		#  "samaccountname=" instead of "uid="
 		#
-		filter = "(macAddress=%{%{Stripped-User-Name}:-%{User-Name}})"
+		filter = "(uid=%{%{Stripped-User-Name}:-%{User-Name}})"
 
 		#  SASL parameters to use for user binds
 		#
@@ -221,7 +221,7 @@ ldap ldap_hosts {
 	#
 	group {
 		#  Where to start searching in the tree for groups
-		base_dn = "ou=hosts,\${..base_dn}"
+		base_dn = "ou=groups,\${..base_dn}"
 
 		#  Filter for group objects, should match all available
 		#  group objects a user might be a member of.

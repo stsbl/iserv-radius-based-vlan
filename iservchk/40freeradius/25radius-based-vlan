@@ -1,0 +1,6 @@
+Check /etc/freeradius/3.0/mods-available/ldap_vlan
+Check /etc/freeradius/3.0/mods-available/perl_vlan
+
+Link ../mods-available/ldap_vlan /etc/freeradius/3.0/mods-enabled/ldap_vlan
+Link ../mods-available/perl_vlan /etc/freeradius/3.0/mods-enabled/perl_vlan
+

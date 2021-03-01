@@ -2,14 +2,16 @@ Source: stsbl-iserv-radius-based-vlan
 Section: misc
 Priority: optional
 Maintainer: Stadtteilschule Blankenese <repository@stsbl.de>
-Build-Depends: debhelper (>= 10)
-Build-Depends-Indep: iserv-buildtools
-Standards-Version: 4.4.1
+Build-Depends: debhelper-compat (= 13),
+  dh-sequence-iserv,
+  dh-sequence-stsbl,
+Standards-Version: 4.5.0
 
 Package: stsbl-iserv-radius-based-vlan
 Architecture: all
 Depends: ${misc:Depends},
   ${perl:Depends},
+  freeradius-ldap,
   iserv-config-file,
   iserv-portal,
   iserv-server-freeradius,
@@ -53,4 +55,4 @@ Description: RADIUS-basierte VLAN-Unterstützung für IServ (EXPERIMENTELL)
  .
  HINWEIS: Dieses Modul baut auf neuen experimentellen Funktionen von IServ auf
  und enthält daher noch möglicherweise Fehler.
-Tag: suite::iserv:portal, role::plugin, status::highlighted, status::experimental
+Tag: suite::iserv:portal, role::plugin, status::experimental

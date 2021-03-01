@@ -3,7 +3,7 @@
 server vlan_inner-tunnel {
 	authorize {
 		perl_vlan
-		ldap_hosts
+		ldap_vlan_host
 
 		update control {
 			Proxy-To-Realm := LOCAL

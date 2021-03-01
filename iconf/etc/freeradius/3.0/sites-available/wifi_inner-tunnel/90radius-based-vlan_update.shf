@@ -14,4 +14,6 @@ sed -E '/^post-auth \{/a\
 \t\tEAP-Message \!* ANY\
 \t\tProxy-State \!* ANY\
 \t\}\
-'
+' | sed -E '
+/^authorize \{/a\
+\tldap_vlan_user'

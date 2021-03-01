@@ -40,7 +40,7 @@ sub canonicalize_mac_part($)
   lc shift . ":";
 }
 
-# FIXME needs fake MSCHAP-V2-Challenge im some way to allow authentication
+# FIXME needs fake MSCHAP-V2-Challenge in some way to allow authentication
 # to always succeed
 sub authorize
 {
