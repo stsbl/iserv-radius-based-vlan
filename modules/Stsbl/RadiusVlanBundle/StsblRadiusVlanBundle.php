@@ -1,9 +1,11 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Stsbl\RadiusVlanBundle;
 
 use Stsbl\RadiusVlanBundle\DependencyInjection\StsblRadiusVlanExtension;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /*
@@ -39,7 +41,7 @@ final class StsblRadiusVlanBundle extends Bundle
     /**
      * {@inheritDoc}
      */
-    public function getContainerExtension(): StsblRadiusVlanExtension
+    public function getContainerExtension(): ?ExtensionInterface
     {
         return new StsblRadiusVlanExtension();
     }

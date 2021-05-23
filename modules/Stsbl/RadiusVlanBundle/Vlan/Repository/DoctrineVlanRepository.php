@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Stsbl\RadiusVlanBundle\Vlan\Repository;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Driver\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use IServ\CoreBundle\Exception\TypeException;
+use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
 use IServ\CrudBundle\Doctrine\ORM\ServiceEntitySpecificationRepository;
 use Stsbl\RadiusVlanBundle\Entity\Vlan;
-use function Doctrine\ORM\QueryBuilder;
 
 /*
  * The MIT License
@@ -39,7 +40,7 @@ use function Doctrine\ORM\QueryBuilder;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class DoctrineVlanRepository extends ServiceEntitySpecificationRepository implements VlanRepositoryInterface
+final class DoctrineVlanRepository extends ServiceEntitySpecificationRepository implements VlanRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -52,11 +53,14 @@ class DoctrineVlanRepository extends ServiceEntitySpecificationRepository implem
     public function highestPriority(): ?int
     {
         $query = $this->getEntityManager()->getConnection()->prepare('SELECT MAX(priority) AS max_priority FROM radius_vlan');
-        $query->execute();
 
-        $result = $query->fetchColumn(0);
+        try {
+            $query->execute();
 
-        return $result;
+            return $query->fetchOne();
+        } catch (Exception $e) {
+            throw new \RuntimeException('Failed to fetch.', 0, $e);
+        }
     }
 
     /**
@@ -65,11 +69,14 @@ class DoctrineVlanRepository extends ServiceEntitySpecificationRepository implem
     public function lowestPriority(): ?int
     {
         $query = $this->getEntityManager()->getConnection()->prepare('SELECT MIN(priority) AS min_priority FROM radius_vlan');
-        $query->execute();
 
-        $result = $query->fetchColumn(0);
+        try {
+            $query->execute();
 
-        return $result;
+            return $query->fetchOne();
+        } catch (Exception $e) {
+            throw new \RuntimeException('Failed to fetch.', 0, $e);
+        }
     }
 
     /**
@@ -91,8 +98,6 @@ class DoctrineVlanRepository extends ServiceEntitySpecificationRepository implem
         } catch (NonUniqueResultException|NoResultException $e) {
             return null;
         }
-
-        return null;
     }
 
     /**
@@ -114,9 +119,6 @@ class DoctrineVlanRepository extends ServiceEntitySpecificationRepository implem
         } catch (NonUniqueResultException|NoResultException $e) {
             return null;
         }
-
-        return null;
-
     }
 
     /**
@@ -124,7 +126,11 @@ class DoctrineVlanRepository extends ServiceEntitySpecificationRepository implem
      */
     public function save(Vlan $vlan): void
     {
-        $this->getEntityManager()->persist($vlan);
-        $this->getEntityManager()->flush($vlan);
+        try {
+            $this->getEntityManager()->persist($vlan);
+            $this->getEntityManager()->flush();
+        } catch (ORMException $e) {
+            throw new \RuntimeException('Failed to persist.', 0, $e);
+        }
     }
 }

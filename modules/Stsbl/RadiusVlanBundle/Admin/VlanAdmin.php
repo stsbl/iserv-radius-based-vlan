@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Stsbl\RadiusVlanBundle\Admin;
 
+use IServ\AdminBundle\Admin\AdminServiceCrud;
 use IServ\CrudBundle\Crud\Batch\DeleteAction;
-use IServ\CrudBundle\Crud\ServiceCrud;
 use IServ\CrudBundle\Entity\CrudInterface;
 use IServ\CrudBundle\Mapper\FormMapper;
 use IServ\CrudBundle\Mapper\ListMapper;
@@ -44,27 +45,8 @@ use Stsbl\RadiusVlanBundle\Vlan\VlanManager;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-final class VlanAdmin extends ServiceCrud
+final class VlanAdmin extends AdminServiceCrud
 {
-    public const TEMPLATE_PAGE = '@IServAdmin/page.html.twig';
-    public const TEMPLATE_BASE = '@IServAdmin/Admin/base.html.twig';
-
-    // Set admin stuff
-    // FIXME No ServiceAdmin base class yet
-
-    /**
-     * {@inheritDoc}
-     */
-    protected $templates = [
-        'page' => self::TEMPLATE_PAGE,
-        'crud_base' => self::TEMPLATE_BASE,
-    ];
-
-    /**
-     * @var VlanManager
-     */
-    private $vlanManager;
-
     /**
      * {@inheritDoc}
      */
@@ -76,7 +58,7 @@ final class VlanAdmin extends ServiceCrud
     public function prePersist(CrudInterface $object, array $previousData = null): void
     {
         /** @var Vlan $object */
-        $object->setPriority($this->vlanManager->getNextFreePriority());
+        $object->setPriority($this->vlanManager()->getNextFreePriority());
     }
 
     /**
@@ -115,8 +97,6 @@ final class VlanAdmin extends ServiceCrud
         $this->itemTitle = _('VLAN network');
         $this->options['sort'] = 'priority';
         $this->templates['crud_index'] = '@StsblRadiusVlan/admin/vlan_index.html.twig';
-
-        $this->vlanManager = $this->locator->get(VlanManager::class);
     }
 
     /**
@@ -249,13 +229,14 @@ final class VlanAdmin extends ServiceCrud
 
         $this->batchActions->get(DeleteAction::NAME)->setCallback([$this, 'onChange']);
 
-        $this->batchActions->add(new SwapVlanAction($this, $this->vlanManager, true));
-        $this->batchActions->add(new SwapVlanAction($this, $this->vlanManager, false));
+        $this->batchActions->add(new SwapVlanAction($this, $this->vlanManager(), true));
+        $this->batchActions->add(new SwapVlanAction($this, $this->vlanManager(), false));
     }
 
     public function onChange(): void
     {
-        $this->eventDispatcher()->dispatch(HostEvents::HOST_CHANGED);
+        $this->eventDispatcher()->dispatch(new class {
+        }, HostEvents::HOST_CHANGED);
     }
 
     /**
@@ -270,6 +251,11 @@ final class VlanAdmin extends ServiceCrud
         $routes->setPathPrefix('/admin/');
 
         return $routes;
+    }
+
+    private function vlanManager(): VlanManager
+    {
+        return $this->locator->get(VlanManager::class);
     }
 
     /**

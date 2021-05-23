@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Stsbl\RadiusVlanBundle\Validator\Constraints;
@@ -75,9 +76,6 @@ final class IpRange extends Constraint
         return $this->message ?? _('This is not a valid IP range.');
     }
 
-    /**
-     * @return string
-     */
     public function getVersion(): string
     {
         return $this->version;
