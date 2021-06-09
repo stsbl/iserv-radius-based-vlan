@@ -1,3 +1,11 @@
+stsbl-iserv-radius-based-vlan (21.06.09.1) testing; urgency=medium
+
+  * Moved to iservinstall
+  * Updated copyright
+  * Fixed deprecations and rectored code
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Wed, 09 Jun 2021 23:03:52 +0200
+
 stsbl-iserv-radius-based-vlan (21.03.01-1) stable; urgency=medium
 
   * Fixed Build-Depends
