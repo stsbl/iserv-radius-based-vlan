@@ -80,9 +80,9 @@ final class IpRangeValidator extends ConstraintValidator
             return;
         }
 
-        if (\filter_var($ip, FILTER_FLAG_IPV4) && !($cidr >= 0 && $cidr <= 32)) {
+        if (\filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) && !($cidr >= 0 && $cidr <= 32)) {
             $this->context->addViolation($constraint->getMessage());
-        } elseif (\filter_var($ip, FILTER_FLAG_IPV6) && !($cidr >= 0 && $cidr <= 64)) {
+        } elseif (\filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) && !($cidr >= 0 && $cidr <= 64)) {
             $this->context->addViolation($constraint->getMessage());
         }
     }
