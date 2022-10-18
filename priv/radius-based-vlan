@@ -1,4 +1,5 @@
 priv.radius_vlan:
+uuid 		2345bd9f-e9fc-4657-b59c-fd066a619c7e
 module      RADIUS-based VLAN support
 title       Manage VLAN networks for RADIUS
 description Users with this privilege can manage the VLAN networks in Administration » Network » VLAN networks.
