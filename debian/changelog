@@ -1,3 +1,10 @@
+stsbl-iserv-radius-based-vlan (22.11.04.1) testing; urgency=medium
+
+  * Added UUID to privleges and flags
+  * Modernized code
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Fri, 04 Nov 2022 06:48:40 +0100
+
 stsbl-iserv-radius-based-vlan (21.12.05.2) stable; urgency=medium
 
   * Added missing maintenance dependency
