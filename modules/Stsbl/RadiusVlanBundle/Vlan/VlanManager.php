@@ -37,14 +37,10 @@ use Stsbl\RadiusVlanBundle\Vlan\Repository\VlanRepositoryInterface;
  */
 final class VlanManager
 {
-    /**
-     * @var VlanRepositoryInterface
-     */
-    private $repository;
 
-    public function __construct(VlanRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        private readonly VlanRepositoryInterface $repository,
+    ) {
     }
 
     /**

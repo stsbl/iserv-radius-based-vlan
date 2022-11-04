@@ -53,10 +53,8 @@ class Vlan implements CrudInterface
      * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false, unique=true)
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int|null
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @Assert\NotBlank()
@@ -64,7 +62,7 @@ class Vlan implements CrudInterface
      *
      * @var string|null
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @Assert\NotBlank()
@@ -73,15 +71,13 @@ class Vlan implements CrudInterface
      *
      * @var int|null
      */
-    private $vlanId;
+    private ?int $vlanId;
 
     /**
      * @Assert\NotBlank()
      * @ORM\Column(name="priority", type="integer", nullable=false, unique=true)
-     *
-     * @var int
      */
-    private $priority = 0;
+    private int $priority = 0;
 
     /**
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id", nullable=true, unique=false)
@@ -89,7 +85,7 @@ class Vlan implements CrudInterface
      *
      * @var Room|null
      */
-    private $room;
+    private ?Room $room;
 
     /**
      * @VlanAssert\IpRange(version="4")
@@ -97,7 +93,7 @@ class Vlan implements CrudInterface
      *
      * @var string|null
      */
-    private $ipRange;
+    private ?string $ipRange;
 
     /**
      * @ORM\JoinTable(name="radius_vlan_group", joinColumns={
@@ -107,9 +103,9 @@ class Vlan implements CrudInterface
      *     }
      * )
      * @ORM\ManyToMany(targetEntity="IServ\CoreBundle\Entity\Group")
-     * @var Group[]|Collection
+     * @var Group[]&Collection
      */
-    private $groups;
+    private Collection $groups;
 
     /**
      * @ORM\JoinTable(name="radius_vlan_role", joinColumns={
@@ -119,9 +115,9 @@ class Vlan implements CrudInterface
      *     }
      * )
      * @ORM\ManyToMany(targetEntity="IServ\CoreBundle\Entity\Role")
-     * @var Role[]|Collection
+     * @var Role[]&Collection
      */
-    private $roles;
+    private Collection $roles;
 
     public function __construct()
     {

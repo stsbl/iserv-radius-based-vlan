@@ -46,17 +46,17 @@ final class IpRange extends Constraint
     /**
      * @var string|null
      */
-    protected $message;
+    protected ?string $message;
 
     /**
      * @var string
      */
-    protected $version = self::ALL;
+    protected string $version = self::ALL;
 
     /**
      * @var string[]
      */
-    private static $versions = [
+    private static array $versions = [
         self::V4,
         self::V6,
         self::ALL,

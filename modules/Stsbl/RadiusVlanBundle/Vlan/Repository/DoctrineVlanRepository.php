@@ -11,6 +11,7 @@ use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use IServ\CrudBundle\Doctrine\ORM\ServiceEntitySpecificationRepository;
 use Stsbl\RadiusVlanBundle\Entity\Vlan;
+use Webmozart\Assert\Assert;
 
 /*
  * The MIT License
@@ -71,9 +72,15 @@ final class DoctrineVlanRepository extends ServiceEntitySpecificationRepository 
         $query = $this->getEntityManager()->getConnection()->prepare('SELECT MIN(priority) AS min_priority FROM radius_vlan');
 
         try {
-            $query->execute();
+            $result = $query->executeQuery()->fetchOne();
 
-            return $query->fetchOne();
+            if (null === $result) {
+                return null;
+            }
+
+            Assert::numeric($result);
+
+            return (int)$result;
         } catch (Exception $e) {
             throw new \RuntimeException('Failed to fetch.', 0, $e);
         }
@@ -126,11 +133,7 @@ final class DoctrineVlanRepository extends ServiceEntitySpecificationRepository 
      */
     public function save(Vlan $vlan): void
     {
-        try {
-            $this->getEntityManager()->persist($vlan);
-            $this->getEntityManager()->flush();
-        } catch (ORMException $e) {
-            throw new \RuntimeException('Failed to persist.', 0, $e);
-        }
+        $this->getEntityManager()->persist($vlan);
+        $this->getEntityManager()->flush();
     }
 }
