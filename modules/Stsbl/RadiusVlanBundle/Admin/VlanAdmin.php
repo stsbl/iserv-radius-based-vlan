@@ -235,7 +235,7 @@ final class VlanAdmin extends AdminServiceCrud
 
     public function onChange(): void
     {
-        $this->eventDispatcher()->dispatch(new class {
+        $this->eventDispatcher()->dispatch(new class () {
         }, HostEvents::HOST_CHANGED);
     }
 

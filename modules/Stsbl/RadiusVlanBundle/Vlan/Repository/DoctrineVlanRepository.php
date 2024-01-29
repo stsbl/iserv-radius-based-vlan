@@ -7,7 +7,6 @@ namespace Stsbl\RadiusVlanBundle\Vlan\Repository;
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use IServ\CrudBundle\Doctrine\ORM\ServiceEntitySpecificationRepository;
 use Stsbl\RadiusVlanBundle\Entity\Vlan;
