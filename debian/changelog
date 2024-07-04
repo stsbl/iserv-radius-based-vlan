@@ -1,3 +1,14 @@
+stsbl-iserv-radius-based-vlan (24.07.04.1) testing; urgency=medium
+
+  * Renamed locale templates
+  * Renamed pot files
+  * Updated .gitignore
+  * Updated CS to PSR-12
+  * iservmake: Disabled Pootle download
+  * Fixed Doctrine deprecations
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Thu, 04 Jul 2024 23:57:15 +0200
+
 stsbl-iserv-radius-based-vlan (22.11.04.1) testing; urgency=medium
 
   * Added UUID to privleges and flags
