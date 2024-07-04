@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Stsbl\RadiusVlanBundle\Vlan\Repository;
 
-use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -55,9 +55,7 @@ final class DoctrineVlanRepository extends ServiceEntitySpecificationRepository 
         $query = $this->getEntityManager()->getConnection()->prepare('SELECT MAX(priority) AS max_priority FROM radius_vlan');
 
         try {
-            $query->execute();
-
-            return $query->fetchOne();
+            return $query->executeQuery()->fetchOne();
         } catch (Exception $e) {
             throw new \RuntimeException('Failed to fetch.', 0, $e);
         }
