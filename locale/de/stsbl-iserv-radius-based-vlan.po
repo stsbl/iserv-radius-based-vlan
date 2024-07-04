@@ -99,12 +99,12 @@ msgid "Module: RADIUS-based VLAN support"
 msgstr "Modul: RADIUS-basierte VLAN-Unterstützung"
 
 #: modules/Stsbl/RadiusVlanBundle/Admin/Batch/SwapVlanAction.php
-#: /tmp/twig2php-stsbl-iserv-radius-based-vlan/modules/Stsbl/RadiusVlanBundle/Resources/views/admin/vlan_index.html.twig.php
+#: modules/Stsbl/RadiusVlanBundle/Resources/views/admin/vlan_index.html.twig.php
 msgid "Move VLAN down in list"
 msgstr "VLAN nach unten verschieben"
 
 #: modules/Stsbl/RadiusVlanBundle/Admin/Batch/SwapVlanAction.php
-#: /tmp/twig2php-stsbl-iserv-radius-based-vlan/modules/Stsbl/RadiusVlanBundle/Resources/views/admin/vlan_index.html.twig.php
+#: modules/Stsbl/RadiusVlanBundle/Resources/views/admin/vlan_index.html.twig.php
 msgid "Move VLAN up in list"
 msgstr "VLAN nach oben verschieben"
 
@@ -138,7 +138,7 @@ msgstr "Raum"
 msgid "The VLAN ID must be a value between 1 and 4095."
 msgstr "Die VLAN-ID muss ein Wert zwischen 1 und 4095 sein."
 
-#: /tmp/twig2php-stsbl-iserv-radius-based-vlan/modules/Stsbl/RadiusVlanBundle/Resources/views/admin/vlan_index.html.twig.php
+#: modules/Stsbl/RadiusVlanBundle/Resources/views/admin/vlan_index.html.twig.php
 #, php-format
 msgid ""
 "The VLANs will be evaluated descending by the priority column. You can move "
