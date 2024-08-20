@@ -232,7 +232,7 @@ for my $name (sort keys %hosts)
   if (defined $hosts{$name}{room})
   {
     ::want ::dn(cn => escape_dn_value($name), ou => "hosts"),
-      memberOf => ::dn(cn => $hosts{$name}{room}, ou => "rooms"),
+      memberOf => ::dn(cn => escape_dn_value($hosts{$name}{room}), ou => "rooms"),
     ;
   }
 }
