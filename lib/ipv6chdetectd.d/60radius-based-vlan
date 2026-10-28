@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+. /usr/lib/iserv/ipv6chdetectd-functions
+[ "$IPV6CHDETECTD_PHASE" = configure ] || exit 0
+
+if iservpkginstalled iserv-server-freeradius; then
+  ipv6_config freeradius.service restart /etc/freeradius/3.0/sites-available/vlan
+  ipv6_validate freeradius.service freeradius -C
+fi

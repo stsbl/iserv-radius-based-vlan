@@ -8,7 +8,7 @@ Homepage: https://it.stsbl.de/documentation/mods/radius-based-vlan
 
 Package: stsbl-iserv-radius-based-vlan
 Architecture: all
-Depends: freeradius-ldap,
+Depends: ipv6chdetectd (>= 26.10.28.1), freeradius-ldap,
          iserv-config-file,
          iserv-portal,
          iserv-server-freeradius,
